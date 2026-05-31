@@ -41,6 +41,13 @@ namespace HelperFunctions
             info.distance = Math.Clamp(info.distance - padding, 0, move.magnitude);
             return success;
         }
+
+        public static Collider[] BoxCollisions(in BoxCollider boxComponent)
+        {
+            Vector3 center = boxComponent.transform.TransformPoint(boxComponent.center);
+            Vector3 halfExtents = Vector3.Scale(boxComponent.size * 0.5f, boxComponent.transform.lossyScale);
+            return Physics.OverlapBox(center, halfExtents, boxComponent.transform.rotation);
+        }
     }
 
     public static class Maths
@@ -50,14 +57,37 @@ namespace HelperFunctions
             return Mathf.Lerp(a, b, 1 - Mathf.Pow(1 - t, Time.deltaTime));
         }
 
+        public static float LerpAngleDelta(float a, float b, float t)
+        {
+            return Mathf.LerpAngle(a, b, 1 - Mathf.Pow(1 - t, Time.deltaTime));
+        }
+
         public static float RoundNearest(float n, float toNearest)
         {
             return Mathf.Round(n / toNearest) * toNearest;
         }
 
+        public static Vector3 DivideVectors(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+        }
+
         public static Vector3 RepeatNum(float n)
         {
             return new Vector3(n, n, n);
+        }
+
+        //Origin between (-1, -1, -1) and (1, 1, 1)
+        public static void OriginScale(Transform transformComponent, Vector3 scale, Vector3 origin)
+        {
+            Bounds bounds = transformComponent.GetComponent<Renderer>().bounds;
+            origin = bounds.center + transformComponent.rotation * Vector3.Scale(origin, bounds.size / 2);
+            
+            Vector3 prevScale = transformComponent.localScale;
+            transformComponent.localScale = scale;
+
+            Vector3 toOrigin = transformComponent.position - origin;
+            transformComponent.position = origin + Vector3.Scale(toOrigin, DivideVectors(scale, prevScale));
         }
     }
 }

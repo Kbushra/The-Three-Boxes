@@ -1,14 +1,22 @@
 using UnityEngine;
 using HelperFunctions;
 using System;
+using Unity.VisualScripting;
+using System.Net.NetworkInformation;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+    public enum State { Normal, Frozen, Locked };
+    public static State state { get; private set; } = State.Normal;
+    public static List<State> stateQueue = new List<State>();
+
     public float speed = 5;
     public float sensitivity = 10;
     public float gravity = 0.8f;
 
-    private Inputs inputs;
+    public static Inputs inputs;
     [SerializeField] private BoxCollider boxComponent;
     [SerializeField] private Transform cameraContainer;
     [SerializeField] private Camera cameraComponent;
@@ -96,16 +104,27 @@ public class Player : MonoBehaviour
         CheckAxis(leftoverMove, Vector3.forward);
     }
 
+    private void UpdateState()
+    {
+        if (stateQueue.Contains(State.Locked)) { state = State.Locked; }
+        else if (stateQueue.Contains(State.Frozen)) { state = State.Frozen; }
+        else { state = State.Normal; }
+
+        stateQueue.Clear();
+    }
+
     private void Update()
     {
         #if UNITY_WEBGL
         if (inputs.FindAction("General/Press").IsPressed()) { Cursor.lockState = CursorLockMode.Locked; }
         #endif
 
-        Look();
+        UpdateState();
+
+        if (state != State.Locked) { Look(); }
 
         Vector3 startPosition = transform.position;
-        Move();
+        if (state == State.Normal) { Move(); }
 
         if (transform.position == startPosition) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
         else { moveTime += Time.deltaTime * 10; }
