@@ -23,7 +23,9 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = 60;
+        #if !UNITY_WEBGL
         Cursor.lockState = CursorLockMode.Locked;
+        #endif
 
         inputs = new Inputs();
         cameraStartY = cameraComponent.transform.localPosition.y;
@@ -96,6 +98,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        #if UNITY_WEBGL
+        if (inputs.FindAction("General/Press").IsPressed()) { Cursor.lockState = CursorLockMode.Locked; }
+        #endif
+
         Look();
 
         Vector3 startPosition = transform.position;
