@@ -1,13 +1,12 @@
-.vs/
-.vscode/
-.vsconfig
 Assembly-CSharp.csproj
-Assets/
-Library/
-Logs/
-Packages/
-ProjectSettings/
-Temp/
 The Three Boxes.slnx
 UserSettings/
+Library/
+Builds/
+Logs/
+Temp/
 obj/
+
+.vsconfig
+.vscode/
+.vs/
