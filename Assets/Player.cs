@@ -4,22 +4,29 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 10;
+    public float speed = 5;
     public float sensitivity = 10;
-    public float gravity = 1;
+    public float gravity = 0.8f;
 
     private Inputs inputs;
-    private Rigidbody rigidbodyComponent;
-    private Camera cameraComponent;
+    [SerializeField] private BoxCollider boxComponent;
+    [SerializeField] private Transform cameraContainer;
+    [SerializeField] private Camera cameraComponent;
 
     private float yaw = 0;
     private float pitch = 0;
+    private float vsp = 0;
+
+    private float moveTime = 0;
+    private float cameraStartY = 0;
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        Cursor.lockState = CursorLockMode.Locked;
+
         inputs = new Inputs();
-        rigidbodyComponent = GetComponent<Rigidbody>();
-        cameraComponent = GetComponentInChildren<Camera>();
+        cameraStartY = cameraComponent.transform.localPosition.y;
     }
 
     private void OnEnable()
@@ -46,41 +53,58 @@ public class Player : MonoBehaviour
         yaw += look.x * sensitivity * Time.deltaTime;
         pitch -= look.y * sensitivity * Time.deltaTime;
         pitch = Math.Clamp(pitch, -80, 80);
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
+        cameraContainer.transform.rotation = Quaternion.Euler(0, yaw, 0);
         cameraComponent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
+    }
+
+    private void CheckAxis(Vector3 leftoverMove, Vector3 mask)
+    {
+        Vector3 filteredMove = Vector3.Scale(leftoverMove, mask);
+
+        if (Collisions.BoxFree(boxComponent, filteredMove, out RaycastHit info)) { transform.position += filteredMove; return; }
+        transform.position += Vector3.Scale(Maths.RepeatNum(info.distance), mask);
     }
 
     private void Move()
     {
-        RaycastHit info;
-        Vector3 move = speed * Time.deltaTime * MovementVector();
+        //On ground
+        if (!Collisions.BoxFree(boxComponent, new Vector3(0, -0.1f, 0), out _))
+        {
+            if (inputs.FindAction("General/Jump").IsPressed()) { vsp = 0.2f; }
+            else { vsp = 0; }
+        }
+        else { vsp -= Time.deltaTime * gravity; }
+
+        //Head bump
+        if (!Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _)) { vsp = Mathf.Clamp(vsp, -0.5f, 0); }
+        else { vsp = Mathf.Clamp(vsp, -0.5f, 0.5f); }
+
+        Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
         if (move.magnitude < 0.01f) { return; }
 
-        float originalX = move.x;
-        float originalZ = move.z;
+        if (Collisions.BoxFree(boxComponent, move, out RaycastHit info)) { transform.position += move; return; }
 
-        if (!HelperFunctions.Collision.MoveFree(rigidbodyComponent, move, out info))
-        {
-            move *= info.distance / move.magnitude;
-            if (!HelperFunctions.Collision.MoveFree(rigidbodyComponent, new Vector3(originalX, 0, move.z), out info))
-            {
-                move.x += info.distance;
-            }
-            else { move.x = originalX; }
-
-            if (!HelperFunctions.Collision.MoveFree(rigidbodyComponent, new Vector3(move.x, 0, originalZ), out info))
-            {
-                move.z += info.distance;
-            }
-            else { move.z = originalZ; }
-        }
-
-        rigidbodyComponent.MovePosition(rigidbodyComponent.position + move);
+        Vector3 leftoverMove = move;
+        move *= info.distance / move.magnitude;
+        transform.position += move;
+        leftoverMove -= move;
+        
+        CheckAxis(leftoverMove, Vector3.right);
+        CheckAxis(leftoverMove, Vector3.up);
+        CheckAxis(leftoverMove, Vector3.forward);
     }
 
     private void Update()
     {
         Look();
+
+        Vector3 startPosition = transform.position;
         Move();
+
+        if (transform.position == startPosition) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
+        else { moveTime += Time.deltaTime * 10; }
+
+        cameraComponent.transform.localPosition = new Vector3(cameraComponent.transform.localPosition.x,
+            cameraStartY + Mathf.Sin(moveTime) * 0.1f, cameraComponent.transform.localPosition.z);
     }
 }
