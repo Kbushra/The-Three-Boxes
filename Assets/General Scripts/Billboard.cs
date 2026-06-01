@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Billboard : MonoBehaviour
 {
-    [SerializeField] private Camera cameraComponent;
+    private Camera cameraComponent;
     private Vector3 initialAngles;
 
     private void Awake()
@@ -10,8 +10,15 @@ public class Billboard : MonoBehaviour
         initialAngles = transform.eulerAngles;
     }
 
+    private void Start()
+    {
+        cameraComponent = FindAnyObjectByType<Camera>();
+        if (!cameraComponent) { Debug.LogWarning("Camera not found!"); }
+    }
+
     private void Look()
     {
+        if (!cameraComponent) { return; }
         transform.LookAt(cameraComponent.transform);
         transform.rotation *= Quaternion.Euler(initialAngles);
         transform.rotation *= Quaternion.Euler(0, 180, 0);

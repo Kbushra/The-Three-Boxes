@@ -2,18 +2,45 @@ using System;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Paper : Interactable
 {
-    [SerializeField] private Canvas canvasComponent;
+    private Canvas canvas;
+    private AudioSource grab;
     [SerializeField] private GameObject bigPaper;
-    [SerializeField] private AudioSource grab;
+
     public string text = "";
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        bool errored = false;
+
+        if (!bigPaper)
+        {
+            errored = true;
+            Debug.LogError("Invalid paper fields! Please add the big paper prefab.");
+        }
+
+        if (errored) { Destroy(this); return; }
+
+        grab = GetComponent<AudioSource>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        canvas = FindAnyObjectByType<Canvas>();
+        if (!canvas) { Debug.LogWarning("Canvas not found!"); }
+    }
 
     public void CollectPaper()
     {
-        if (FindObjectsByType<BigPaper>().Length > 0) { return; }
+        if (FindObjectsByType<BigPaper>().Length > 0 || !canvas) { return; }
 
-        GameObject paper = Instantiate(bigPaper, canvasComponent.transform);
+        GameObject paper = Instantiate(bigPaper, canvas.transform);
         paper.GetComponentInChildren<TextMeshProUGUI>().text = text;
         grab.Play();
     }

@@ -1,23 +1,21 @@
 using UnityEngine;
 using HelperFunctions;
 using System;
-using Unity.VisualScripting;
-using System.Net.NetworkInformation;
-using System.Linq;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(BoxCollider))]
 public class Player : MonoBehaviour
 {
     public enum State { Normal, Frozen, Locked };
-    public static State state { get; private set; } = State.Normal;
-    public static List<State> stateQueue = new List<State>();
+    public State state { get; private set; } = State.Normal;
+    public List<State> stateQueue = new List<State>();
+    public Inputs inputs;
 
     public float speed = 5;
     public float sensitivity = 10;
     public float gravity = 0.8f;
-
-    public static Inputs inputs;
-    [SerializeField] private BoxCollider boxComponent;
+    
+    private BoxCollider boxComponent;
     [SerializeField] private Transform cameraContainer;
     [SerializeField] private Camera cameraComponent;
 
@@ -36,6 +34,24 @@ public class Player : MonoBehaviour
         #endif
 
         inputs = new Inputs();
+        boxComponent = GetComponent<BoxCollider>();
+
+        bool errored = false;
+
+        if (!cameraContainer)
+        {
+            Debug.LogError("Invalid player fields! Please add the camera container transform.");
+            errored = true;
+        }
+
+        if (!cameraComponent)
+        {
+            Debug.LogError("Invalid player fields! Please add the camera.");
+            errored = true;
+        }
+
+        if (errored) { Destroy(this); return; }
+        
         cameraStartY = cameraComponent.transform.localPosition.y;
     }
 

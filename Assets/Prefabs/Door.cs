@@ -1,18 +1,53 @@
 using UnityEngine;
 using HelperFunctions;
+using System;
 using System.Linq;
 using UnityEditor;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private Collider playerCollider;
+    private Player player;
+    private BoxCollider playerCollider;
     [SerializeField] private BoxCollider openBoxComponent;
     [SerializeField] private Transform closedTransformComponent;
 
     public bool open = false;
     public SceneAsset targetScene;
 
-    void Update()
+    private void Awake()
+    {
+        bool errored = false;
+
+        if (!openBoxComponent)
+        {
+            Debug.LogError("Invalid door fields! Please add the open door box collider.");
+            errored = true;
+        }
+
+        if (!closedTransformComponent)
+        {
+            Debug.LogError("Invalid door fields! Please add the closed door transform.");
+            errored = true;
+        }
+
+        if (!targetScene)
+        {
+            Debug.LogError("Invalid door fields! Please add the target scene.");
+            errored = true;
+        }
+
+        if (errored) { Destroy(this); return; }
+    }
+
+    private void Start()
+    {
+        player = FindAnyObjectByType<Player>();
+        playerCollider = player.GetComponent<BoxCollider>();
+        if (!player) { Debug.LogWarning("Player not found!"); }
+        if (!playerCollider) { Debug.LogWarning("Player collider not found!"); }
+    }
+
+    private void Update()
     {
         if (open && closedTransformComponent)
         {
@@ -22,8 +57,9 @@ public class Door : MonoBehaviour
             if (Maths.RoundNearest(closedTransformComponent.localScale.y, 0.01f) == 0) { Destroy(closedTransformComponent.gameObject); }
         }
 
+        if (!player || !playerCollider) { return; }
         if (!open || !Collisions.BoxCollisions(openBoxComponent).Contains(playerCollider)) { return; }
 
-        Player.stateQueue.Add(Player.State.Frozen);
+        player.stateQueue.Add(Player.State.Frozen);
     }
 }
