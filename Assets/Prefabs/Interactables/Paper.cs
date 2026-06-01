@@ -32,7 +32,7 @@ public class Paper : Interactable
     {
         base.Start();
 
-        canvas = FindAnyObjectByType<Canvas>();
+        canvas = SingleCanvas.canvas;
         if (!canvas) { Debug.LogWarning("Canvas not found!"); }
     }
 

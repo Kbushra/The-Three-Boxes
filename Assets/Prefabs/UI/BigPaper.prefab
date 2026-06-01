@@ -74,8 +74,8 @@ MonoBehaviour:
     It is vital to us that our customers are abiding to the
     TERMS AND CONDITIONS of our company.'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e223ae6faf0e01e4ead115f9c7d02e06, type: 2}
-  m_sharedMaterial: {fileID: -3228707771758324184, guid: e223ae6faf0e01e4ead115f9c7d02e06, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 55a7840b94807af42bfc6040879c11c9, type: 2}
+  m_sharedMaterial: {fileID: 1573470488637989655, guid: 55a7840b94807af42bfc6040879c11c9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -233,5 +233,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350068c6b4519b543b4ba242233c3b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BigPaper
-  imageComponent: {fileID: 2051388283692892217}
   textComponent: {fileID: 620597335765388468}
+  fading: 0

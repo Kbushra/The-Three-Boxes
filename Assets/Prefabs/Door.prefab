@@ -46,9 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ec71b6b675512647b77ce8b5adfc072, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  playerCollider: {fileID: 0}
-  openBoxComponent: {fileID: 1433236598826641377}
-  closedTransformComponent: {fileID: 2129245425732955281}
+  openDoor: {fileID: 5340867107478641326}
+  closedDoor: {fileID: 7462335557732608269}
+  fader: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}
+  bigParticles: {fileID: 335111712517567274, guid: 16485d62bcf7b48499c098fb3e3858b0, type: 3}
+  smallParticles: {fileID: 7957140562899610153, guid: f598002be354b58489861b6b4ab168f3, type: 3}
   open: 0
   targetScene: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
 --- !u!1 &5340867107478641326

@@ -77,11 +77,21 @@ namespace HelperFunctions
             return new Vector3(n, n, n);
         }
 
+        public static Vector3 BoundsSize(Transform transformComponent)
+        {
+            return transformComponent.GetComponent<Renderer>().bounds.size;
+        }
+
         //Origin between (-1, -1, -1) and (1, 1, 1)
-        public static void OriginScale(Transform transformComponent, Vector3 scale, Vector3 origin)
+        public static Vector3 OriginWorldPosition(Transform transformComponent, Vector3 origin)
         {
             Bounds bounds = transformComponent.GetComponent<Renderer>().bounds;
-            origin = bounds.center + transformComponent.rotation * Vector3.Scale(origin, bounds.size / 2);
+            return bounds.center + transformComponent.rotation * Vector3.Scale(origin, bounds.size / 2);
+        }
+
+        public static void OriginScale(Transform transformComponent, Vector3 scale, Vector3 origin)
+        {
+            origin = OriginWorldPosition(transformComponent, origin);
             
             Vector3 prevScale = transformComponent.localScale;
             transformComponent.localScale = scale;
