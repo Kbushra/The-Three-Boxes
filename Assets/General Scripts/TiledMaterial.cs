@@ -14,7 +14,7 @@ public class TiledMaterial : MonoBehaviour
 
     void Update()
     {
-        Vector3 boundsSize = Maths.BoundsSize(transform);
+        Vector3 boundsSize = Quaternion.Inverse(transform.rotation) * Maths.BoundsSize(transform);
         materialComponent.mainTextureScale = new Vector2(boundsSize.x, boundsSize.z);
     }
 }
