@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Persistent : MonoBehaviour
 {
-    protected virtual void Awake()
+    private void Awake()
     {
         DontDestroyOnLoad(this);
     }
