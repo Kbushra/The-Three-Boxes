@@ -77,6 +77,11 @@ namespace HelperFunctions
             return new Vector3(n, n, n);
         }
 
+        public static Vector3 MeshSize(Transform transformComponent)
+        {
+            return transformComponent.GetComponent<MeshFilter>().sharedMesh.bounds.size;
+        }
+
         public static Vector3 BoundsSize(Transform transformComponent)
         {
             return transformComponent.GetComponent<Renderer>().bounds.size;

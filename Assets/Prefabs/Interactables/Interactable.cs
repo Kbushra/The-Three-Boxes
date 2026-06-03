@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    private Player player;
     private Camera cameraComponent;
     [SerializeField] private Collider colliderComponent;
     [SerializeField] private GameObject interactPrompt;
@@ -34,21 +33,20 @@ public class Interactable : MonoBehaviour
 
     protected virtual void Start()
     {
-        player = FindAnyObjectByType<Player>();
         cameraComponent = FindAnyObjectByType<Camera>();
-        if (!player) { Debug.LogWarning("Player not found!"); }
+        if (!Player.player) { Debug.LogWarning("Player not found!"); }
         if (!cameraComponent) { Debug.LogWarning("Camera not found!"); }
     }
 
     protected void DetectInteract()
     {
-        bool interacted = player.inputs.FindAction("General/Interact").WasPressedThisFrame();
+        bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
         if (interacted) { onInteract?.Invoke(); }
     }
 
     protected virtual void Update()
     {
-        if (!player || !cameraComponent || player.state != Player.State.Normal) { return; }
+        if (!Player.player || !cameraComponent || Player.state != Player.State.Normal) { return; }
 
         Physics.Raycast(cameraComponent.transform.position, cameraComponent.transform.forward, out RaycastHit hit, 3);
         interactPrompt.SetActive(hit.collider == colliderComponent);

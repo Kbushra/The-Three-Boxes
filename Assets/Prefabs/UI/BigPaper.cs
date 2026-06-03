@@ -9,7 +9,6 @@ using UnityEngine.Animations;
 [RequireComponent(typeof(Image))]
 public class BigPaper : MonoBehaviour
 {
-    private Player player;
     private Image imageComponent;
     [SerializeField] private TextMeshProUGUI textComponent;
     private float targAlpha = 1;
@@ -39,8 +38,7 @@ public class BigPaper : MonoBehaviour
 
     private void Start()
     {
-        player = FindAnyObjectByType<Player>();
-        if (!player) { Debug.LogWarning("Player not found!"); }
+        if (!Player.player) { Debug.LogWarning("Player not found!"); }
     }
 
     private void Update()
@@ -50,7 +48,7 @@ public class BigPaper : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0, 0, Maths.LerpAngleDelta(transform.localEulerAngles.z, targZRot, 0.9f));
         transform.localPosition = new Vector3(0, Maths.LerpDelta(transform.localPosition.y, targY, 0.9f), 0);
 
-        bool interacted = player ? player.inputs.FindAction("General/Interact").WasPressedThisFrame() : false;
+        bool interacted = Player.player ? Player.inputs.FindAction("General/Interact").WasPressedThisFrame() : false;
         if (imageComponent.color.a >= 0.99f && !fading && interacted)
         {
             fading = true;
@@ -59,7 +57,7 @@ public class BigPaper : MonoBehaviour
             targY = 500;
         }
 
-        if (!fading && player) { player.stateQueue.Add(Player.State.Locked); }
+        if (!fading && Player.player) { Player.stateQueue.Add(Player.State.Locked); }
         if (imageComponent.color.a <= 0.01f && fading) { Destroy(gameObject); }
     }
 }

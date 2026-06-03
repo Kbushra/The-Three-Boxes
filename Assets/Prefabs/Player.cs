@@ -7,9 +7,10 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public enum State { Normal, Frozen, Locked };
-    public State state { get; private set; } = State.Normal;
-    public List<State> stateQueue = new List<State>();
-    public Inputs inputs;
+    public static State state { get; private set; } = State.Normal;
+    public static List<State> stateQueue = new List<State>();
+    public static Inputs inputs;
+    public static Player player;
 
     public float speed = 5;
     public float sensitivity = 10;
@@ -28,6 +29,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        player = this;
+
         Application.targetFrameRate = 60;
         #if !UNITY_WEBGL
         Cursor.lockState = CursorLockMode.Locked;

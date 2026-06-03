@@ -10,7 +10,6 @@ public class Door : MonoBehaviour
     private const int sideBottom = 0;
     private const int sideTop = 1;
 
-    private Player player;
     private BoxCollider playerCollider;
     private Canvas canvas;
     [SerializeField] private GameObject openDoor;
@@ -72,11 +71,14 @@ public class Door : MonoBehaviour
 
     private void Start()
     {
-        player = FindAnyObjectByType<Player>();
-        playerCollider = player.GetComponent<BoxCollider>();
+        if (!Player.player) { Debug.LogWarning("Player not found!"); }
+        else
+        {
+            playerCollider = Player.player.GetComponent<BoxCollider>();
+            if (!playerCollider) { Debug.LogWarning("Player collider not found!"); }
+        }
+
         canvas = SingleCanvas.canvas;
-        if (!player) { Debug.LogWarning("Player not found!"); }
-        if (!playerCollider) { Debug.LogWarning("Player collider not found!"); }
         if (!canvas) { Debug.LogWarning("Canvas not found!"); }
     }
 
@@ -129,10 +131,10 @@ public class Door : MonoBehaviour
     {
         if (open) { OpenCutscene(); }
 
-        if (!player || !playerCollider) { return; }
+        if (!Player.player || !playerCollider) { return; }
         if (!open || !Collisions.BoxCollisions(openDoor.GetComponent<BoxCollider>()).Contains(playerCollider)) { return; }
 
-        player.stateQueue.Add(Player.State.Frozen);
+        Player.stateQueue.Add(Player.State.Frozen);
         if (FindObjectsByType<Fade>().Length > 0) { return; }
 
         GameObject fadeInstance = Instantiate(fader, canvas.transform);
