@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] private GameObject interactPrompt;
 
     [SerializeField] private UnityEvent onInteract;
+    public bool interactable = false;
     
     protected virtual void Awake()
     {
@@ -49,7 +50,8 @@ public class Interactable : MonoBehaviour
         if (!Player.player || !cameraComponent || Player.state != Player.State.Normal) { return; }
 
         Physics.Raycast(cameraComponent.transform.position, cameraComponent.transform.forward, out RaycastHit hit, 3);
-        interactPrompt.SetActive(hit.collider == colliderComponent);
+        interactable = hit.collider == colliderComponent;
+        interactPrompt.SetActive(interactable);
         if (interactPrompt.activeSelf) { DetectInteract(); }
     }
 }

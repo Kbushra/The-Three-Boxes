@@ -1,0 +1,32 @@
+C:/Users/WIN 11/Videos/Animations/ffmpeg/bin/ffmpeg.exe -hide_banner -y -y -r 12 -start_number 0 -start_number_range 1 -i C:/Users/WIN 11/Documents/Github projects/Unity/The Three Boxes/Assets/StreamingAssets/frame%04d.png -crf 23 -preset medium -profile:v baseline -pix_fmt yuv420p C:/Users/WIN 11/Documents/Github projects/Unity/The Three Boxes/Assets/StreamingAssets/fire.mp4
+=====================================================
+Input #0, image2, from 'C:/Users/WIN 11/Documents/Github projects/Unity/The Three Boxes/Assets/StreamingAssets/frame%04d.png':
+  Duration: 00:00:00.32, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc, gbr/unknown/unknown), 64x64 [SAR 3937:3937 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 000001d07fac3400] using SAR=1/1
+[libx264 @ 000001d07fac3400] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 000001d07fac3400] profile Constrained Baseline, level 1.0, 4:2:0, 8-bit
+[libx264 @ 000001d07fac3400] 264 - core 164 r3191 4613ac3 - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=0 ref=3 deblock=1:0:0 analyse=0x1:0x111 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=0 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=2 lookahead_threads=1 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=0 weightp=0 keyint=250 keyint_min=12 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'C:/Users/WIN 11/Documents/Github projects/Unity/The Three Boxes/Assets/StreamingAssets/fire.mp4':
+  Metadata:
+    encoder         : Lavf61.1.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(progressive), 64x64 [SAR 1:1 DAR 1:1], q=2-31, 12 fps, 12288 tbn
+      Metadata:
+        encoder         : Lavc61.3.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[out#0/mp4 @ 000001d07fabef80] video:4KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 22.913427%
+frame=    8 fps=0.0 q=-1.0 Lsize=       5KiB time=00:00:00.66 bitrate=  56.9kbits/s speed=59.6x    
+[libx264 @ 000001d07fac3400] frame I:1     Avg QP:18.81  size:   471
+[libx264 @ 000001d07fac3400] frame P:7     Avg QP:25.12  size:   394
+[libx264 @ 000001d07fac3400] mb I  I16..4: 50.0%  0.0% 50.0%
+[libx264 @ 000001d07fac3400] mb P  I16..4: 11.6%  0.0%  8.0%  P16..4: 17.9% 17.9% 21.4%  0.0%  0.0%    skip:23.2%
+[libx264 @ 000001d07fac3400] coded y,uvDC,uvAC intra: 27.6% 52.6% 47.4% inter: 33.3% 53.3% 53.3%
+[libx264 @ 000001d07fac3400] i16 v,h,dc,p: 86%  0% 14%  0%
+[libx264 @ 000001d07fac3400] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24%  4% 50%  3%  4%  7%  3%  4%  1%
+[libx264 @ 000001d07fac3400] i8c dc,h,v,p: 58%  3% 34%  5%
+[libx264 @ 000001d07fac3400] ref P L0: 56.6% 33.2% 10.2%
+[libx264 @ 000001d07fac3400] kb/s:38.76
