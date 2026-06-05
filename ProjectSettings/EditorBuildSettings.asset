@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneIntro.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/SceneCrates.unity
+    guid: 880b9c770bc43444cbcdc592c7eacd5b
   m_configObjects:
     com.unity.adaptivePerformance.basic.provider_settings: {fileID: 11400000, guid: c02c9c09f230f7a4aa765840de4eeb04, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: baa63c99f4843b74ab61fb04a34b67b9, type: 2}

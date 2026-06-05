@@ -4,6 +4,7 @@ public class Billboard : MonoBehaviour
 {
     private Camera cameraComponent;
     private Vector3 initialAngles;
+    public Vector3 rotationMask = Vector3.one;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class Billboard : MonoBehaviour
         transform.LookAt(cameraComponent.transform);
         transform.rotation *= Quaternion.Euler(initialAngles);
         transform.rotation *= Quaternion.Euler(0, 180, 0);
+        transform.rotation = Quaternion.Euler(Vector3.Scale(transform.eulerAngles, rotationMask));
     }
 
     private void OnEnable()
