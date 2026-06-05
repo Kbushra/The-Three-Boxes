@@ -97,15 +97,14 @@ public class Player : MonoBehaviour
     private void Move()
     {
         //On ground
-        if (!Collisions.BoxFree(boxComponent, new Vector3(0, -0.1f, 0), out _))
+        if (!Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _))
         {
-            if (inputs.FindAction("General/Jump").IsPressed()) { vsp = 0.2f; }
-            else { vsp = 0; }
+            vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0;
         }
         else { vsp -= Time.deltaTime * gravity; }
 
         //Head bump
-        if (!Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _)) { vsp = Mathf.Clamp(vsp, -0.5f, 0); }
+        if (vsp > 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _)) { vsp = 0; }
         else { vsp = Mathf.Clamp(vsp, -0.5f, 0.5f); }
 
         Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
