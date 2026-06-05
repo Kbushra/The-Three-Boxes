@@ -6,7 +6,7 @@ public class Interactable : MonoBehaviour
 {
     private Camera cameraComponent;
     [SerializeField] private Collider colliderComponent;
-    [SerializeField] private GameObject interactPrompt;
+    [SerializeField] private Renderer renderComponent;
 
     [SerializeField] private UnityEvent onInteract;
     public bool interactable = false;
@@ -21,9 +21,9 @@ public class Interactable : MonoBehaviour
             errored = true;
         }
 
-        if (!interactPrompt)
+        if (!renderComponent)
         {
-            Debug.LogError("Invalid interactable fields! Please add the interact object.");
+            Debug.LogError("Invalid interactable fields! Please add the renderer.");
             errored = true;
         }
 
@@ -51,7 +51,9 @@ public class Interactable : MonoBehaviour
 
         Physics.Raycast(cameraComponent.transform.position, cameraComponent.transform.forward, out RaycastHit hit, 3);
         interactable = hit.collider == colliderComponent;
-        interactPrompt.SetActive(interactable);
-        if (interactPrompt.activeSelf) { DetectInteract(); }
+        
+        float tint = interactable ? 1 : 0.85f;
+        renderComponent.material.SetColor("_Color", new Color(tint, tint, tint));
+        if (interactable) { DetectInteract(); }
     }
 }
