@@ -14,12 +14,13 @@ public class Fade : MonoBehaviour
     private void Awake()
     {
         imageComponent = GetComponent<Image>();
-        imageComponent.color = new Color(1, 1, 1, 0);
+        imageComponent.color = new Color(imageComponent.color.r, imageComponent.color.g, imageComponent.color.b, 0);
     }
 
     private void Update()
     {
-        imageComponent.color = new Color(1, 1, 1, imageComponent.color.a + (fadingOut ? -1 : 1) * Time.deltaTime / 2);
+        imageComponent.color = new Color(imageComponent.color.r, imageComponent.color.g, imageComponent.color.b,
+            imageComponent.color.a + (fadingOut ? -1 : 1) * Time.deltaTime / 2);
 
         if (!fadingOut && imageComponent.color.a >= 1) { fadingOut = true; SceneManager.LoadScene(targetScene.name); }
         else if (fadingOut && imageComponent.color.a <= 0) { Destroy(gameObject); }

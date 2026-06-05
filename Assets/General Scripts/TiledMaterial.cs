@@ -21,5 +21,6 @@ public class TiledMaterial : MonoBehaviour
         Vector3 boundsSize = new Vector3(xscale, 0, yscale);
         if (useTransform) { boundsSize = Vector3.Scale(Maths.MeshSize(transform) * transformScale, transform.lossyScale); }
         materialComponent.mainTextureScale = new Vector2(boundsSize.x, boundsSize.z);
+        Debug.Log(boundsSize);
     }
 }

@@ -129,6 +129,7 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
+        openDoor.SetActive(open);
         if (open) { OpenCutscene(); }
 
         if (!Player.player || !playerCollider) { return; }
