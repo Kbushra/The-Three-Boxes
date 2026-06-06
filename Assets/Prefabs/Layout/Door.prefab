@@ -52,7 +52,7 @@ MonoBehaviour:
   bigParticles: {fileID: 335111712517567274, guid: 16485d62bcf7b48499c098fb3e3858b0, type: 3}
   smallParticles: {fileID: 7957140562899610153, guid: f598002be354b58489861b6b4ab168f3, type: 3}
   open: 0
-  targetScene: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  targetScene: {fileID: 102900000, guid: 880b9c770bc43444cbcdc592c7eacd5b, type: 3}
 --- !u!1 &5340867107478641326
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +177,6 @@ GameObject:
   - component: {fileID: 7147594732604634528}
   - component: {fileID: 5937044258757878837}
   - component: {fileID: 4759680099781975297}
-  - component: {fileID: 2668078360843117908}
   m_Layer: 3
   m_Name: DoorClosed
   m_TagString: Untagged
@@ -278,20 +277,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2668078360843117908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7462335557732608269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e124cc470060a4e9599ac75d8b1f70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TiledMaterial
-  useTransform: 1
-  excludeAxis: 2
-  transformScale: 0.5
-  xscale: 1
-  yscale: 1.5
