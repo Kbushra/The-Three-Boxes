@@ -70,6 +70,8 @@ public class Player : MonoBehaviour
 
     private Vector3 MovementVector()
     {
+        if (state != State.Normal) { return Vector3.zero; }
+
         Vector2 movement = inputs.FindAction("General/Move").ReadValue<Vector2>();
         Vector3 inputVector = new Vector3(movement.x, 0, movement.y).normalized;
         Vector3 rotatedVector = Quaternion.Euler(0, yaw, 0) * inputVector;
@@ -97,7 +99,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
         //On ground
-        if (!Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _))
+        if (vsp < 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _))
         {
             vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0;
         }
@@ -142,7 +144,7 @@ public class Player : MonoBehaviour
         if (state != State.Locked) { Look(); }
 
         Vector3 startPosition = transform.position;
-        if (state == State.Normal) { Move(); }
+        Move();
 
         if (transform.position == startPosition) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
         else { moveTime += Time.deltaTime * 10; }
