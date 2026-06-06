@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5599510548946332004}
   - component: {fileID: 1148048467285892951}
   m_Layer: 5
-  m_Name: Fade
+  m_Name: FadeEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,4 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5619975b6c0052e4caa7ab9bcb0f2571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fade
+  fadingOut: 0
+  spd: 0.5
+  hold: 0
   targetScene: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}

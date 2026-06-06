@@ -49,14 +49,14 @@ public class Interactable : MonoBehaviour
 
     public void HoverStandard(Renderer renderComponent)
     {
-        float emission = interactable ? 0.15f : 0;
+        float emission = interactable ? 0.25f : 0;
         renderComponent.material.EnableKeyword("_EMISSION");
         renderComponent.material.SetColor("_EmissionColor", new Color(emission, emission, emission));
     }
 
     public void HoverSprite(Renderer renderComponent)
     {
-        float tint = interactable ? 1 : 0.85f;
+        float tint = interactable ? 1 : 0.75f;
         renderComponent.material.SetColor("_Color", new Color(tint, tint, tint));
     }
 

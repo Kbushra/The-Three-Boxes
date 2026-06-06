@@ -136,9 +136,9 @@ public class Door : MonoBehaviour
         if (!open || !Collisions.BoxCollisions(openDoor.GetComponent<BoxCollider>()).Contains(playerCollider)) { return; }
 
         Player.stateQueue.Add(Player.State.Frozen);
-        if (FindObjectsByType<Fade>().Length > 0) { return; }
+        if (FindObjectsByType<FadeRoom>().Length > 0) { return; }
 
         GameObject fadeInstance = Instantiate(fader, canvas.transform);
-        fadeInstance.GetComponent<Fade>().targetScene = targetScene;
+        fadeInstance.GetComponent<FadeRoom>().targetScene = targetScene;
     }
 }

@@ -4,25 +4,30 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Image))]
-public class Fade : MonoBehaviour
+public class FadeEffect : MonoBehaviour
 {
     private Image imageComponent;
-    private bool fadingOut = false;
 
-    public SceneAsset targetScene;
+    public bool fadingOut = false;
+    public float spd = 1;
+    public float hold = 0;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         imageComponent = GetComponent<Image>();
         imageComponent.color = new Color(imageComponent.color.r, imageComponent.color.g, imageComponent.color.b, 0);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         imageComponent.color = new Color(imageComponent.color.r, imageComponent.color.g, imageComponent.color.b,
-            imageComponent.color.a + (fadingOut ? -1 : 1) * Time.deltaTime / 2);
+            imageComponent.color.a + (fadingOut ? -1 : 1) * Time.deltaTime * spd);
 
-        if (!fadingOut && imageComponent.color.a >= 1) { fadingOut = true; SceneManager.LoadScene(targetScene.name); }
+        if (!fadingOut && imageComponent.color.a >= 1)
+        {
+            hold -= Time.deltaTime;
+            if (hold <= 0) { fadingOut = true; }
+        }
         else if (fadingOut && imageComponent.color.a <= 0) { Destroy(gameObject); }
     }
 }

@@ -6,6 +6,8 @@ public class SceneCratesManager : MonoBehaviour
 {
     [SerializeField] private BoxCollider jumpCollider;
     [SerializeField] private GameObject message;
+    [SerializeField] private BoxCollider titleCollider;
+    [SerializeField] private GameObject title;
     private Message messageInstance;
 
     private Player player;
@@ -59,6 +61,12 @@ public class SceneCratesManager : MonoBehaviour
             step = 1;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
             messageInstance.message = "SPACE to jump";
+        }
+
+        if (step == 2 && Collisions.BoxCollisions(titleCollider).Contains(playerCollider))
+        {
+            step = 3;
+            Instantiate(title, canvas.transform);
         }
     }
 
