@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 85a87297866394b41ad6b205118ea2ee
+guid: 5754ed7dff78513439e17d5d9394bfc6
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Arial Rounded MT Bold
+  - Cambria
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

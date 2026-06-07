@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4105c0b01f088374c8631674492fa904, type: 2}
-  m_sharedMaterial: {fileID: 8443813155182606326, guid: 4105c0b01f088374c8631674492fa904, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 849a219766d72fd4daed6d3bf8ea1717, type: 2}
+  m_sharedMaterial: {fileID: 4328482402534161844, guid: 849a219766d72fd4daed6d3bf8ea1717, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -152,3 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Message
   message: 
   targY: -195
+  fade: 0
+  shifts: -1
+  fadeAfter: 1
