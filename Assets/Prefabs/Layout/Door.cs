@@ -7,6 +7,14 @@ using System.Threading;
 
 public class Door : MonoBehaviour
 {
+    public static void OpenAll()
+    {
+        foreach (Door door in FindObjectsByType<Door>())
+        {
+            door.open = true;
+        }
+    }
+
     private const int sideBottom = 0;
     private const int sideTop = 1;
 
@@ -14,6 +22,8 @@ public class Door : MonoBehaviour
     private Canvas canvas;
     [SerializeField] private GameObject openDoor;
     [SerializeField] private GameObject closedDoor;
+    [SerializeField] private AudioSource lightSteam;
+    [SerializeField] private AudioSource heavySteam;
     [SerializeField] private GameObject fader;
     [SerializeField] private GameObject bigParticles;
     [SerializeField] private GameObject smallParticles;
@@ -39,6 +49,18 @@ public class Door : MonoBehaviour
         if (!closedDoor)
         {
             Debug.LogError("Invalid door fields! Please add the closed door.");
+            errored = true;
+        }
+
+        if (!lightSteam)
+        {
+            Debug.LogError("Invalid door fields! Please add the light steam sound.");
+            errored = true;
+        }
+
+        if (!heavySteam)
+        {
+            Debug.LogError("Invalid door fields! Please add the heavy steam sound.");
             errored = true;
         }
 
@@ -100,6 +122,7 @@ public class Door : MonoBehaviour
         if (!smallStartParticle)
         {
             smallStartParticle = SpawnParticle(smallParticles, sideBottom);
+            lightSteam.Play();
         }
 
         timer += Time.deltaTime;
@@ -108,11 +131,13 @@ public class Door : MonoBehaviour
         if (!bigStartParticle)
         {
             bigStartParticle = SpawnParticle(bigParticles, sideBottom);
+            heavySteam.Play();
         }
 
         if (timer >= 2.5f && !smallEndParticle)
         {
             smallEndParticle = SpawnParticle(smallParticles, sideTop);
+            lightSteam.Play();
         }
 
         if (!closedDoor) { return; }

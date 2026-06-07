@@ -52,6 +52,11 @@ namespace HelperFunctions
 
     public static class Maths
     {
+        public static bool NearEquals(float a, float b, float precision = 0.1f)
+        {
+            return Mathf.Abs(a - b) <= precision;
+        }
+
         public static float LerpDelta(float a, float b, float t)
         {
             return Mathf.Lerp(a, b, 1 - Mathf.Pow(1 - t, Time.deltaTime));

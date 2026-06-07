@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 6769431370278934090}
   - component: {fileID: 7593895972047511171}
   - component: {fileID: 5819778199693997028}
-  - component: {fileID: 6255391035587496989}
   m_Layer: 3
   m_Name: Tile
   m_TagString: Untagged
@@ -146,22 +145,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6255391035587496989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6326931326778568747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e124cc470060a4e9599ac75d8b1f70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TiledMaterial
-  useTransform: 1
-  transformScale: 0.5
-  xscale: 1
-  yscale: 1
 --- !u!1 &6605712406717338970
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +157,6 @@ GameObject:
   - component: {fileID: 1895051518519486598}
   - component: {fileID: 5075234258744421438}
   - component: {fileID: 6229160490276503846}
-  - component: {fileID: 8025260559561202044}
   m_Layer: 3
   m_Name: Base
   m_TagString: Untagged
@@ -275,19 +257,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8025260559561202044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6605712406717338970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12e124cc470060a4e9599ac75d8b1f70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TiledMaterial
-  useTransform: 1
-  transformScale: 0.5
-  xscale: 1
-  yscale: 1

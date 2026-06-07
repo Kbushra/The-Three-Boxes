@@ -43,7 +43,7 @@ public class BigPaper : MonoBehaviour
 
     private void Update()
     {
-        imageComponent.color = new Color(1, 1, 1, Maths.LerpDelta(imageComponent.color.a, targAlpha, 0.9f));
+        imageComponent.color = new Color(1, 1, 1, Maths.LerpDelta(imageComponent.color.a, targAlpha, 0.98f));
         textComponent.color = new Color(0, 0, 0, imageComponent.color.a);
         transform.localRotation = Quaternion.Euler(0, 0, Maths.LerpAngleDelta(transform.localEulerAngles.z, targZRot, 0.9f));
         transform.localPosition = new Vector3(0, Maths.LerpDelta(transform.localPosition.y, targY, 0.9f), 0);

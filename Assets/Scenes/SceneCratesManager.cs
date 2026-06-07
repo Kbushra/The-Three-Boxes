@@ -8,6 +8,7 @@ public class SceneCratesManager : MonoBehaviour
     [SerializeField] private GameObject message;
     [SerializeField] private BoxCollider titleCollider;
     [SerializeField] private GameObject title;
+    [SerializeField] private BoxCollider lightCollider;
     private Message messageInstance;
 
     private Player player;
@@ -15,6 +16,7 @@ public class SceneCratesManager : MonoBehaviour
     private Canvas canvas;
 
     private int step = 0;
+    private float collisionTime = 0;
 
     private void Awake()
     {
@@ -45,7 +47,7 @@ public class SceneCratesManager : MonoBehaviour
 
     private void ManageSteps()
     {
-        if (!player || !canvas) { return; }
+        if (!player || !playerCollider || !canvas) { return; }
 
         if (step == 0 || step == 1)
         {
@@ -72,7 +74,14 @@ public class SceneCratesManager : MonoBehaviour
 
     private void ManagePuzzle()
     {
-        //Todo
+        if (!player || !playerCollider) { return; }
+
+        if (Collisions.BoxCollisions(lightCollider).Contains(playerCollider)) { collisionTime += Time.deltaTime; }
+        else
+        {
+            if (Maths.NearEquals(collisionTime, 3, 0.5f)) { Door.OpenAll(); }
+            collisionTime = 0;
+        }
     }
 
     private void Update()
