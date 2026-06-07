@@ -47,9 +47,9 @@ public class Interactable : MonoBehaviour
         if (interacted) { onInteract?.Invoke(); }
     }
 
-    public void HoverStandard(Renderer renderComponent)
+    public void HoverURPLit(Renderer renderComponent)
     {
-        float emission = interactable ? 0.25f : 0;
+        float emission = interactable ? 0.05f : 0;
         renderComponent.material.EnableKeyword("_EMISSION");
         renderComponent.material.SetColor("_EmissionColor", new Color(emission, emission, emission));
     }

@@ -43,7 +43,7 @@ public class BigPaper : MonoBehaviour
 
     private void Update()
     {
-        imageComponent.color = new Color(1, 1, 1, Maths.LerpDelta(imageComponent.color.a, targAlpha, 0.98f));
+        imageComponent.color = new Color(1, 1, 1, Maths.LerpDelta(imageComponent.color.a, targAlpha, 0.998f));
         textComponent.color = new Color(0, 0, 0, imageComponent.color.a);
         transform.localRotation = Quaternion.Euler(0, 0, Maths.LerpAngleDelta(transform.localEulerAngles.z, targZRot, 0.9f));
         transform.localPosition = new Vector3(0, Maths.LerpDelta(transform.localPosition.y, targY, 0.9f), 0);
@@ -58,6 +58,6 @@ public class BigPaper : MonoBehaviour
         }
 
         if (!fading && Player.player) { Player.stateQueue.Add(Player.State.Locked); }
-        if (imageComponent.color.a <= 0.01f && fading) { Destroy(gameObject); }
+        if (Maths.NearEquals(imageComponent.color.a, 0, 0.005f) && fading) { Destroy(gameObject); }
     }
 }

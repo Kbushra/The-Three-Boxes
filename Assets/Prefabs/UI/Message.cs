@@ -1,5 +1,6 @@
 using System;
 using HelperFunctions;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,10 @@ public class Message : MonoBehaviour
     public float targY = -195;
     public bool fade = false;
     public int shifts = -1;
+
+    public bool fadeAfter = true;
+    
+    private float fadeAfterDelay = 3;
 
     private void Shift(int dir)
     {
@@ -48,10 +53,16 @@ public class Message : MonoBehaviour
 
         if (shifts >= 1) { fade = true; }
         float targAlpha = fade ? 0 : 1;
-        float time = shifts == 0 && !fade ? 0.5f : (shifts == 1 || fade ? 0.9f : 0.98f);
+        float time = shifts == 0 && !fade ? 0.5f : (shifts == 1 || fade ? 0.99f : 0.998f);
         textComponent.color = new Color(1, 1, 1, Maths.LerpDelta(textComponent.color.a, targAlpha, time));
 
-        if (fade && textComponent.color.a <= 0.01f)
+        if (fadeAfter)
+        {
+            fadeAfterDelay -= Time.deltaTime;
+            if (fadeAfterDelay <= 0) { fade = true; }
+        }
+
+        if (fade && Maths.NearEquals(textComponent.color.a, 0, 0.005f))
         {
             Shift(-1);
             Destroy(gameObject);

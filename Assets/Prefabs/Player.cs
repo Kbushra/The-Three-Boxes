@@ -98,18 +98,16 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        //On ground
-        if (vsp < 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _))
-        {
-            vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0;
-        }
+        Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
+
+        bool inAir = Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _);
+        if (vsp < 0 && !inAir) { vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
         else { vsp -= Time.deltaTime * gravity; }
 
-        //Head bump
-        if (vsp > 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _)) { vsp = 0; }
+        bool hitCeiling = !Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _);
+        if (vsp > 0 && hitCeiling) { vsp = 0; }
         else { vsp = Mathf.Clamp(vsp, -0.5f, 0.5f); }
-
-        Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
+        
         if (move.magnitude < 0.01f) { return; }
 
         if (Collisions.BoxFree(boxComponent, move, out RaycastHit info)) { transform.position += move; return; }
@@ -146,7 +144,9 @@ public class Player : MonoBehaviour
         Vector3 startPosition = transform.position;
         Move();
 
-        if (transform.position == startPosition) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
+        bool inAir = Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _);
+        bool notMoving = transform.position.x == startPosition.x && transform.position.z == startPosition.z;
+        if (inAir || notMoving) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
         else { moveTime += Time.deltaTime * 10; }
 
         cameraComponent.transform.localPosition = new Vector3(cameraComponent.transform.localPosition.x,

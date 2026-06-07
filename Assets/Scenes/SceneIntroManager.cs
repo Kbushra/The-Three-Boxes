@@ -37,6 +37,7 @@ public class Scene1Manager : MonoBehaviour
             step = 1;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
             messageInstance.message = "WASD/Arrows to move, CURSOR to look";
+            messageInstance.fadeAfter = false;
         }
 
         if (step == 2 || step == 3)
@@ -57,6 +58,7 @@ public class Scene1Manager : MonoBehaviour
             step = 3;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
             messageInstance.message = "E to interact";
+            messageInstance.fadeAfter = false;
         }
     }
 

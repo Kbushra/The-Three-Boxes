@@ -63,6 +63,7 @@ public class SceneCratesManager : MonoBehaviour
             step = 1;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
             messageInstance.message = "SPACE to jump";
+            messageInstance.fadeAfter = false;
         }
 
         if (step == 2 && Collisions.BoxCollisions(titleCollider).Contains(playerCollider))
