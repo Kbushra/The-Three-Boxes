@@ -15,7 +15,9 @@ public class SceneQuadrantsManager : MonoBehaviour
             if (!painting.interactable) { continue; }
 
             if (painting != solutionPaintings[currPaintingIndex]) { currPaintingIndex = 0; }
-            else { currPaintingIndex++; }
+
+            //Not an else so if you select the first painting again your index is now 1
+            if (painting == solutionPaintings[currPaintingIndex]) { currPaintingIndex++; }
             break;
         }
 
