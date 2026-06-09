@@ -1217,7 +1217,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3980137895055704138, guid: 81d235fad460bc94bb019ea9440e1368, type: 3}
       propertyPath: text
-      value: A series of paintings, a loop to traverse.\nThey must be understood.
+      value: A series of paintings, a loop to traverse.\nThey must be understood,
+        but not more than once.
       objectReference: {fileID: 0}
     - target: {fileID: 7476974833559111606, guid: 81d235fad460bc94bb019ea9440e1368, type: 3}
       propertyPath: m_LocalPosition.x

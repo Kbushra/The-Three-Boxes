@@ -4,12 +4,12 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    private Camera cameraComponent;
-    [SerializeField] private Collider colliderComponent;
-    [SerializeField] private Renderer[] renderComponents = new Renderer[0];
+    protected Camera cameraComponent;
+    [SerializeField] protected Collider colliderComponent;
+    [SerializeField] protected Renderer[] renderComponents;
 
-    [SerializeField] private UnityEvent<Renderer> onHover;
-    [SerializeField] private UnityEvent onInteract;
+    [SerializeField] protected UnityEvent<Renderer> onHover;
+    [SerializeField] protected UnityEvent onInteract;
     public bool interactable = false;
     
     protected virtual void Awake()
@@ -41,7 +41,18 @@ public class Interactable : MonoBehaviour
         if (!cameraComponent) { Debug.LogWarning("Camera not found!"); }
     }
 
-    protected void DetectInteract()
+    protected virtual void DetectHover()
+    {
+        Physics.Raycast(cameraComponent.transform.position, cameraComponent.transform.forward, out RaycastHit hit, 3);
+        interactable = hit.collider == colliderComponent;
+        
+        foreach (Renderer renderComponent in renderComponents)
+        {
+            onHover?.Invoke(renderComponent);
+        }
+    }
+
+    protected virtual void DetectInteract()
     {
         bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
         if (interacted) { onInteract?.Invoke(); }
@@ -64,14 +75,7 @@ public class Interactable : MonoBehaviour
     {
         if (!Player.player || !cameraComponent || Player.state != Player.State.Normal) { return; }
 
-        Physics.Raycast(cameraComponent.transform.position, cameraComponent.transform.forward, out RaycastHit hit, 3);
-        interactable = hit.collider == colliderComponent;
-        
-        foreach (Renderer renderComponent in renderComponents)
-        {
-            onHover?.Invoke(renderComponent);
-        }
-        
+        DetectHover();
         if (interactable) { DetectInteract(); }
     }
 }

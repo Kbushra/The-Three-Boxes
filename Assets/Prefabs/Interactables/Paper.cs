@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
 public class Paper : Interactable
