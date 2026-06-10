@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4529337108077149195
 Transform:
@@ -109,7 +109,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &196912987991680492
 Transform:
@@ -230,6 +230,7 @@ MonoBehaviour:
         m_CallState: 2
   interactable: 0
   parentButton: {fileID: 5268900279665801261}
+  holdLength: 0
 --- !u!65 &8606689838074711961
 BoxCollider:
   m_ObjectHideFlags: 0
