@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class SceneLayersManager : MonoBehaviour
 {
-    //All per layer
-    [SerializeField] private GameObject[,] LEDs = new GameObject[3, 4];
-    [SerializeField] private Button[,] buttons = new Button[3, 2];
+    [SerializeField] private GameObject[] firstLEDs = new GameObject[4];
+    [SerializeField] private GameObject[] secondLEDs = new GameObject[4];
+    [SerializeField] private Button[] firstButtons = new Button[2];
+    [SerializeField] private Button[] secondButtons = new Button[2];
+    [SerializeField] private Button swapButton;
     [SerializeField] private Door[] doors = new Door[3];
 
     private int layer = 0;
@@ -17,32 +19,47 @@ public class SceneLayersManager : MonoBehaviour
 
     private void InterpretMorse(Button signalButton, Button breakButton)
     {
-        //todo
+        
+    }
+
+    private void MorseLEDs(string morse, GameObject[] LEDs)
+    {
+        
     }
 
     private void InterpretTap(Button firstTapButton, Button secondTapButton)
     {
-        //todo
+        
+    }
+
+    private void TapLEDs(int firstTapReq, int secondTapReq, GameObject[] LEDs)
+    {
+        
     }
 
     private void Update()
     {
         if (layer == 0)
         {
-            InterpretMorse(buttons[0, 0], buttons[0, 1]);
+            InterpretMorse(firstButtons[0], firstButtons[1]);
+            MorseLEDs(decodedMorse, firstLEDs);
         }
         if (layer == 1)
         {
-            InterpretTap(buttons[1, 0], buttons[1, 1]);
+            InterpretTap(secondButtons[0], secondButtons[1]);
+            TapLEDs(3, 5, secondLEDs);
         }
         if (layer == 2)
         {
             if (thirdLayerActivated)
             {
-                InterpretTap(buttons[0, 0], buttons[0, 1]);
-                InterpretMorse(buttons[1, 0], buttons[1, 1]);
+                InterpretTap(firstButtons[0], firstButtons[1]);
+                TapLEDs(2, 3, firstLEDs);
+
+                InterpretMorse(secondButtons[0], secondButtons[1]);
+                MorseLEDs(decodedMorse, secondLEDs);
             }
-            else if (buttons[2, 0].holdLength > 0) { thirdLayerActivated = true; }
+            else if (swapButton.holdLength > 0) { thirdLayerActivated = true; }
         }
     }
 }

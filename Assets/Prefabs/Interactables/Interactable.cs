@@ -60,7 +60,7 @@ public class Interactable : MonoBehaviour
 
     public void HoverURPLit(Renderer renderComponent)
     {
-        float emission = interactable ? 0.05f : 0;
+        float emission = interactable ? 0.01f : 0;
         renderComponent.material.EnableKeyword("_EMISSION");
         renderComponent.material.SetColor("_EmissionColor", new Color(emission, emission, emission));
     }

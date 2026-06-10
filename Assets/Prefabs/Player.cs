@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
         Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
 
         bool inAir = Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _);
-        if (vsp < 0 && !inAir) { vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
+        if (vsp <= 0 && !inAir) { vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
         else { vsp -= Time.deltaTime * gravity; }
 
         bool hitCeiling = !Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _);
