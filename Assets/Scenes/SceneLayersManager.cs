@@ -1,65 +1,222 @@
+using System.Linq;
 using UnityEngine;
 
 public class SceneLayersManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] firstLEDs = new GameObject[4];
-    [SerializeField] private GameObject[] secondLEDs = new GameObject[4];
+    [SerializeField] private GameObject[] firstLeds = new GameObject[4];
+    [SerializeField] private GameObject[] secondLeds = new GameObject[4];
     [SerializeField] private Button[] firstButtons = new Button[2];
     [SerializeField] private Button[] secondButtons = new Button[2];
     [SerializeField] private Button swapButton;
     [SerializeField] private Door[] doors = new Door[3];
 
-    private int layer = 0;
-    private string decodedMorse = "";
+    private bool[] layersCompleted = new bool[4];
+    private bool swapActivated = false;
+
+    private float ledsFlickerTime = 0;
+
+    private string morse = "";
+
     private int firstTap = 0;
     private int secondTap = 0;
-    private int firstTapWait = 0;
-    private int secondTapWait = 0;
-    private bool thirdLayerActivated = false;
+    private float firstTapWait = 0;
+    private float secondTapWait = 0;
 
-    private void InterpretMorse(Button signalButton, Button breakButton)
+    private void Awake()
     {
-        
+        bool errored = false;
+
+        if (firstLeds.Length == 0)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add first layer leds.");
+            errored = true;
+        }
+
+        if (secondLeds.Length == 0)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add second layer leds.");
+            errored = true;
+        }
+
+        if (firstButtons.Length < 2)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add 2 first layer buttons.");
+            errored = true;
+        }
+
+        if (secondButtons.Length < 2)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add 2 second layer buttons.");
+            errored = true;
+        }
+
+        if (!swapButton)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add the swap button.");
+            errored = true;
+        }
+
+        if (doors.Length < 3)
+        {
+            Debug.LogError("Invalid scene layer manager fields! Please add 3 doors.");
+            errored = true;
+        }
+
+        if (errored) { Destroy(this); return; }
     }
 
-    private void MorseLEDs(string morse, GameObject[] LEDs)
+    private void SetLedEmission(GameObject led, bool condition)
     {
-        
+        Renderer renderComponent = led.GetComponent<Renderer>();
+        float emission = condition ? 25 : 0;
+        renderComponent.material.EnableKeyword("_EMISSION");
+        renderComponent.material.SetColor("_EmissionColor", new Color(emission, 0, 0));
     }
 
-    private void InterpretTap(Button firstTapButton, Button secondTapButton)
+    private void FlickerLeds(GameObject[] leds)
     {
-        
+        float interval = 0.02f;
+        int prevInterval = (int)(ledsFlickerTime / interval);
+        ledsFlickerTime -= Time.deltaTime;
+        int currInterval = (int)(ledsFlickerTime / interval);
+
+        if (prevInterval == currInterval) { return; }
+
+        for (int i = 0; i < leds.Length; i++)
+        {
+            SetLedEmission(leds[i], Random.value < 0.5f);
+        }
     }
 
-    private void TapLEDs(int firstTapReq, int secondTapReq, GameObject[] LEDs)
+    private void InterpretMorse(Button signalButton, Button breakButton, int layerIndex)
     {
-        
+        if (layersCompleted[layerIndex])
+        {
+            signalButton.fullHoldLength = 0;
+            breakButton.fullHoldLength = 0;
+            return;
+        }
+
+        if (signalButton.fullHoldLength > 0)
+        {
+            morse += signalButton.fullHoldLength < 0.25f ? '.' : '-';
+            signalButton.fullHoldLength = 0;
+        }
+
+        if (breakButton.fullHoldLength > 0)
+        {
+            morse += ' ';
+            breakButton.fullHoldLength = 0;
+        }
+    }
+
+    private void MorseLeds(string morseReq, GameObject[] leds, int layerIndex)
+    {
+        if (layersCompleted[layerIndex]) { return; }
+
+        if (ledsFlickerTime > 0)
+        {
+            FlickerLeds(leds);
+            if (ledsFlickerTime > 0) { return; }
+        }
+
+        int letterCount = 0;
+        for (int i = 0; i < morse.Length; i++)
+        {
+            if (morse[i] == ' ') { letterCount++; }
+        }
+
+        for (int i = 0; i < leds.Length; i++)
+        {
+            SetLedEmission(leds[i], letterCount > i);
+        }
+
+        if (letterCount == 4)
+        {
+            if (morse != morseReq) { ledsFlickerTime = 1; }
+            else { layersCompleted[layerIndex] = true; }
+
+            morse = "";
+        }
+    }
+
+    private void InterpretTap(Button firstButton, Button secondButton, int layerIndex)
+    {
+        if (layersCompleted[layerIndex])
+        {
+            firstButton.fullHoldLength = 0;
+            secondButton.fullHoldLength = 0;
+            return;
+        }
+
+        if (firstButton.fullHoldLength > 0)
+        {
+            firstTap++;
+            firstButton.fullHoldLength = 0;
+        }
+
+        if (firstTap > 0 && firstButton.currentHoldLength == 0) { firstTapWait += Time.deltaTime; } else { firstTapWait = 0; }
+
+        if (secondButton.fullHoldLength > 0)
+        {
+            secondTap++;
+            secondButton.fullHoldLength = 0;
+        }
+
+        if (secondTap > 0 && secondButton.currentHoldLength == 0) { secondTapWait += Time.deltaTime; } else { secondTapWait = 0; }
+    }
+
+    private void TapLeds(int firstTapReq, int secondTapReq, GameObject[] leds, int layerIndex)
+    {
+        if (layersCompleted[layerIndex]) { return; }
+
+        if (ledsFlickerTime > 0)
+        {
+            FlickerLeds(leds);
+            if (ledsFlickerTime > 0) { return; }
+        }
+
+        for (int i = 0; i < leds.Length; i++)
+        {
+            SetLedEmission(leds[i],
+                (i < leds.Length/4 && firstTap > 0) ||
+                (i >= leds.Length/4 && i < leds.Length/2 && firstTapWait > 1) ||
+                (i >= leds.Length/2 && i < leds.Length*3/4 && secondTap > 0) ||
+                (i >= leds.Length*3/4 && secondTapWait > 1)
+            );
+        }
+
+        if (firstTapWait > 1 && secondTapWait > 1)
+        {
+            if (firstTap != firstTapReq || secondTap != secondTapReq) { ledsFlickerTime = 1; }
+            else { layersCompleted[layerIndex] = true; }
+
+            firstTap = 0;
+            secondTap = 0;
+        }
     }
 
     private void Update()
     {
-        if (layer == 0)
-        {
-            InterpretMorse(firstButtons[0], firstButtons[1]);
-            MorseLEDs(decodedMorse, firstLEDs);
-        }
-        if (layer == 1)
-        {
-            InterpretTap(secondButtons[0], secondButtons[1]);
-            TapLEDs(3, 5, secondLEDs);
-        }
-        if (layer == 2)
-        {
-            if (thirdLayerActivated)
-            {
-                InterpretTap(firstButtons[0], firstButtons[1]);
-                TapLEDs(2, 3, firstLEDs);
+        if (swapButton.fullHoldLength > 0) { swapActivated = true; }
 
-                InterpretMorse(secondButtons[0], secondButtons[1]);
-                MorseLEDs(decodedMorse, secondLEDs);
-            }
-            else if (swapButton.holdLength > 0) { thirdLayerActivated = true; }
+        if (!swapActivated)
+        {
+            InterpretMorse(firstButtons[0], firstButtons[1], 0);
+            MorseLeds(".--. --- ... - ", firstLeds, 0);
+            InterpretTap(secondButtons[0], secondButtons[1], 1);
+            TapLeds(3, 5, secondLeds, 1);
         }
+        else
+        {
+            InterpretTap(firstButtons[0], firstButtons[1], 2);
+            TapLeds(2, 3, firstLeds, 2);
+            InterpretMorse(secondButtons[0], secondButtons[1], 3);
+            MorseLeds("- .- .--. ... ", secondLeds, 3);
+        }
+
+        doors[0].open = layersCompleted[0];
+        doors[1].open = layersCompleted[1];
+        doors[2].open = layersCompleted[2] && layersCompleted[3];
     }
 }
