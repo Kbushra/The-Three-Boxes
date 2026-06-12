@@ -1111,6 +1111,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Paper
       objectReference: {fileID: 0}
+    - target: {fileID: 2808764054331597159, guid: d8488b4e8177bd340b0158be08db8d31, type: 3}
+      propertyPath: text
+      value: The next room awaits.
+      objectReference: {fileID: 0}
     - target: {fileID: 5485908444487672211, guid: d8488b4e8177bd340b0158be08db8d31, type: 3}
       propertyPath: text
       value: The next room awaits.

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4529337108077149195}
   - component: {fileID: 894315586053230649}
   - component: {fileID: 7093938496380411291}
+  - component: {fileID: 3337921462280817584}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -91,6 +92,55 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3337921462280817584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5268900279665801261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e17e28fbb5500be4298a7bc4c0225a7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Button
+  colliderComponent: {fileID: 8606689838074711961}
+  renderComponents:
+  - {fileID: 6768811409999835273}
+  onHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3337921462280817584}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
+        m_MethodName: HoverButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onInteract:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5268900279665801261}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  interactable: 0
+  parentButton: {fileID: 5268900279665801261}
+  currentHoldLength: 0
+  fullHoldLength: 0
 --- !u!1 &8113786989018609674
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +152,6 @@ GameObject:
   - component: {fileID: 196912987991680492}
   - component: {fileID: 284667930620234789}
   - component: {fileID: 6768811409999835273}
-  - component: {fileID: 7096173654873041513}
   - component: {fileID: 8606689838074711961}
   m_Layer: 0
   m_Name: Pressable
@@ -183,54 +232,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7096173654873041513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8113786989018609674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e17e28fbb5500be4298a7bc4c0225a7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Button
-  colliderComponent: {fileID: 8606689838074711961}
-  renderComponents:
-  - {fileID: 6768811409999835273}
-  onHover:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7096173654873041513}
-        m_TargetAssemblyTypeName: Button, Assembly-CSharp
-        m_MethodName: HoverButton
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onInteract:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8113786989018609674}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  interactable: 0
-  parentButton: {fileID: 5268900279665801261}
-  holdLength: 0
 --- !u!65 &8606689838074711961
 BoxCollider:
   m_ObjectHideFlags: 0

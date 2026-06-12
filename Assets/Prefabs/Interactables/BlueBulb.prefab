@@ -49,7 +49,7 @@ Light:
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 0, g: 0.21176493, b: 1, a: 1}
-  m_Intensity: 5
+  m_Intensity: 15
   m_Range: 4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -688,6 +688,7 @@ MonoBehaviour:
         m_CallState: 2
   interactable: 0
   lightObject: {fileID: 5847142672403570633}
+  initalLightOn: 1
 --- !u!4 &5272438603850250131 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7325fd9e4d21e9248a3c50e4b79b79ee, type: 3}

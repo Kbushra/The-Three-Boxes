@@ -4,8 +4,7 @@ using UnityEngine.Events;
 
 public class Button : Interactable
 {
-    [SerializeField] private GameObject parentButton;
-    private Vector3 parentStart;
+    private Vector3 start;
     private float offset = 0;
 
     public float currentHoldLength = 0;
@@ -14,18 +13,7 @@ public class Button : Interactable
     protected override void Awake()
     {
         base.Awake();
-
-        bool errored = false;
-
-        if (!parentButton)
-        {
-            errored = true;
-            Debug.LogError("Invalid button fields! Please add the parent button.");
-        }
-
-        if (errored) { Destroy(this); return; }
-
-        parentStart = parentButton.transform.position;
+        start = transform.position;
     }
 
     public void HoverButton(Renderer renderComponent)
@@ -54,7 +42,7 @@ public class Button : Interactable
         }
 
         offset = Maths.LerpDelta(offset, interacted ? -0.1f : 0, 0.9998f);
-        Vector3 targOffset = parentButton.transform.rotation * new Vector3(0, offset, 0);
-        parentButton.transform.position = parentStart + targOffset;
+        Vector3 targOffset = transform.rotation * new Vector3(0, offset, 0);
+        transform.position = start + targOffset;
     }
 }

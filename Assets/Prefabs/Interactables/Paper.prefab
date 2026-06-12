@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 672084244872742948}
-  - component: {fileID: 5485908444487672211}
-  - component: {fileID: 5875906566576548802}
+  - component: {fileID: 5548944593458770797}
+  - component: {fileID: 2808764054331597159}
   m_Layer: 0
   m_Name: Paper
   m_TagString: Untagged
@@ -34,55 +34,7 @@ Transform:
   - {fileID: 5653518243613651469}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5485908444487672211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2514508849285996458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d40ffb6c9a4773044960bb3c3688cd2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Paper
-  colliderComponent: {fileID: 5256088716456663701}
-  renderComponents:
-  - {fileID: 769221948371943499}
-  onHover:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5485908444487672211}
-        m_TargetAssemblyTypeName: Paper, Assembly-CSharp
-        m_MethodName: HoverSprite
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onInteract:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5485908444487672211}
-        m_TargetAssemblyTypeName: Paper, Assembly-CSharp
-        m_MethodName: CollectPaper
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  interactable: 0
-  bigPaper: {fileID: 3935474405043699714, guid: 53505ad0ff8c1d746a09d24a94d60588, type: 3}
-  text: 
---- !u!82 &5875906566576548802
+--- !u!82 &5548944593458770797
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,6 +131,54 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2808764054331597159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2514508849285996458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d40ffb6c9a4773044960bb3c3688cd2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Paper
+  colliderComponent: {fileID: 5256088716456663701}
+  renderComponents:
+  - {fileID: 769221948371943499}
+  onHover:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2808764054331597159}
+        m_TargetAssemblyTypeName: Paper, Assembly-CSharp
+        m_MethodName: HoverSprite
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onInteract:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2808764054331597159}
+        m_TargetAssemblyTypeName: Paper, Assembly-CSharp
+        m_MethodName: CollectPaper
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  interactable: 0
+  bigPaper: {fileID: 3935474405043699714, guid: 53505ad0ff8c1d746a09d24a94d60588, type: 3}
+  text: A chicken's leg roasted for 3 seconds.
 --- !u!1 &3512856063502402094
 GameObject:
   m_ObjectHideFlags: 0
