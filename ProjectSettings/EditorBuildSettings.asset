@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneLayers.unity
     guid: 3fcc25d30d21fa441a5226f603190fc8
+  - enabled: 1
+    path: Assets/Scenes/SceneCandles.unity
+    guid: 07b1db4658045784aac463a0ad02b31a
   m_configObjects:
     com.unity.adaptivePerformance.basic.provider_settings: {fileID: 11400000, guid: c02c9c09f230f7a4aa765840de4eeb04, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: baa63c99f4843b74ab61fb04a34b67b9, type: 2}

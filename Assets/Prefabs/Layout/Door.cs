@@ -24,6 +24,7 @@ public class Door : MonoBehaviour
     [SerializeField] private GameObject closedDoor;
     [SerializeField] private AudioSource lightSteam;
     [SerializeField] private AudioSource heavySteam;
+    [SerializeField] private AudioSource steps;
     [SerializeField] private GameObject fader;
     [SerializeField] private GameObject bigParticles;
     [SerializeField] private GameObject smallParticles;
@@ -61,6 +62,12 @@ public class Door : MonoBehaviour
         if (!heavySteam)
         {
             Debug.LogError("Invalid door fields! Please add the heavy steam sound.");
+            errored = true;
+        }
+
+        if (!steps)
+        {
+            Debug.LogError("Invalid door fields! Please add the steps sound.");
             errored = true;
         }
 
@@ -163,6 +170,7 @@ public class Door : MonoBehaviour
         Player.stateQueue.Add(Player.State.Frozen);
         if (FindObjectsByType<FadeRoom>().Length > 0) { return; }
 
+        steps.Play();
         GameObject fadeInstance = Instantiate(fader, canvas.transform);
         fadeInstance.GetComponent<FadeRoom>().targetScene = targetScene;
     }

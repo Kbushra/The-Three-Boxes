@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class BlueBulb : Interactable
 {
     [SerializeField] private GameObject lightObject;
@@ -21,6 +22,7 @@ public class BlueBulb : Interactable
 
     public void ToggleLight()
     {
+        GetComponent<AudioSource>().Play();
         lightObject.SetActive(!lightObject.activeSelf);
     }
 }

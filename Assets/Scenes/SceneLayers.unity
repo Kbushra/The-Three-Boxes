@@ -1642,7 +1642,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5740218894384288796, guid: d038c8b82950d0648828117312be8ba5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.625
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5847142672403570633, guid: d038c8b82950d0648828117312be8ba5, type: 3}
       propertyPath: m_IsActive
@@ -3088,6 +3088,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4527202465296743739, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}
+      propertyPath: targetScene
+      value: 
+      objectReference: {fileID: 102900000, guid: 07b1db4658045784aac463a0ad02b31a, type: 3}
     - target: {fileID: 8888321524366099211, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

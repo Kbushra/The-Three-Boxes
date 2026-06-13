@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class Button : Interactable
 {
+    [SerializeField] private AudioSource press;
+    [SerializeField] private AudioSource release;
+
     private Vector3 start;
     private float offset = 0;
 
@@ -13,6 +16,23 @@ public class Button : Interactable
     protected override void Awake()
     {
         base.Awake();
+
+        bool errored = false;
+
+        if (!press)
+        {
+            Debug.LogError("Invalid button fields! Please add the press SFX.");
+            errored = true;
+        }
+
+        if (!release)
+        {
+            Debug.LogError("Invalid button fields! Please add the release SFX.");
+            errored = true;
+        }
+
+        if (errored) { Destroy(this); return; }
+
         start = transform.position;
     }
 
@@ -33,6 +53,9 @@ public class Button : Interactable
 
         bool interacted = false;
         if (interactable) { interacted = Player.inputs.FindAction("General/Interact").IsPressed(); }
+
+        if (currentHoldLength == 0 && interacted) { press.Play(); }
+        if (currentHoldLength > 0 && !interacted) { release.Play(); }
 
         if (interacted) { currentHoldLength += Time.deltaTime; }
         else
