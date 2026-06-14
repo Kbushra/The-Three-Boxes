@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2880432900738365324}
   - component: {fileID: 7549649709973922491}
   - component: {fileID: 4100431337777405908}
+  - component: {fileID: 6461238771400954574}
   m_Layer: 0
-  m_Name: LED
+  m_Name: Led
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,3 +91,15 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6461238771400954574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699395695871164883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1721d2cf05e431246950f41a5c64f476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Led

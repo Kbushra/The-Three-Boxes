@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class SceneLayersManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] firstLeds = new GameObject[4];
-    [SerializeField] private GameObject[] secondLeds = new GameObject[4];
+    [SerializeField] private Led[] firstLeds = new Led[4];
+    [SerializeField] private Led[] secondLeds = new Led[4];
     [SerializeField] private Button[] firstButtons = new Button[2];
     [SerializeField] private Button[] secondButtons = new Button[2];
     [SerializeField] private Button swapButton;
@@ -12,8 +12,6 @@ public class SceneLayersManager : MonoBehaviour
 
     private bool[] layersCompleted = new bool[4];
     private bool swapActivated = false;
-
-    private float ledsFlickerTime = 0;
 
     private string morse = "";
 
@@ -65,29 +63,6 @@ public class SceneLayersManager : MonoBehaviour
         if (errored) { Destroy(this); return; }
     }
 
-    private void SetLedEmission(GameObject led, bool condition)
-    {
-        Renderer renderComponent = led.GetComponent<Renderer>();
-        float emission = condition ? 25 : 0;
-        renderComponent.material.EnableKeyword("_EMISSION");
-        renderComponent.material.SetColor("_EmissionColor", new Color(emission, 0, 0));
-    }
-
-    private void FlickerLeds(GameObject[] leds)
-    {
-        float interval = 0.02f;
-        int prevInterval = (int)(ledsFlickerTime / interval);
-        ledsFlickerTime -= Time.deltaTime;
-        int currInterval = (int)(ledsFlickerTime / interval);
-
-        if (prevInterval == currInterval) { return; }
-
-        for (int i = 0; i < leds.Length; i++)
-        {
-            SetLedEmission(leds[i], Random.value < 0.5f);
-        }
-    }
-
     private void InterpretMorse(Button signalButton, Button breakButton, int layerIndex)
     {
         if (layersCompleted[layerIndex])
@@ -110,15 +85,9 @@ public class SceneLayersManager : MonoBehaviour
         }
     }
 
-    private void MorseLeds(string morseReq, GameObject[] leds, int layerIndex)
+    private void MorseLeds(string morseReq, Led[] leds, int layerIndex)
     {
-        if (layersCompleted[layerIndex]) { return; }
-
-        if (ledsFlickerTime > 0)
-        {
-            FlickerLeds(leds);
-            if (ledsFlickerTime > 0) { return; }
-        }
+        if (layersCompleted[layerIndex] || Led.LedsFlickering(leds)) { return; }
 
         int letterCount = 0;
         for (int i = 0; i < morse.Length; i++)
@@ -128,12 +97,12 @@ public class SceneLayersManager : MonoBehaviour
 
         for (int i = 0; i < leds.Length; i++)
         {
-            SetLedEmission(leds[i], letterCount > i);
+            leds[i].Toggle(letterCount > i);
         }
 
         if (letterCount == 4)
         {
-            if (morse != morseReq) { ledsFlickerTime = 1; }
+            if (morse != morseReq) { Led.FlickerLeds(leds, 1); }
             else { layersCompleted[layerIndex] = true; }
 
             morse = "";
@@ -166,19 +135,13 @@ public class SceneLayersManager : MonoBehaviour
         if (secondTap > 0 && secondButton.currentHoldLength == 0) { secondTapWait += Time.deltaTime; } else { secondTapWait = 0; }
     }
 
-    private void TapLeds(int firstTapReq, int secondTapReq, GameObject[] leds, int layerIndex)
+    private void TapLeds(int firstTapReq, int secondTapReq, Led[] leds, int layerIndex)
     {
-        if (layersCompleted[layerIndex]) { return; }
-
-        if (ledsFlickerTime > 0)
-        {
-            FlickerLeds(leds);
-            if (ledsFlickerTime > 0) { return; }
-        }
+        if (layersCompleted[layerIndex] || Led.LedsFlickering(leds)) { return; }
 
         for (int i = 0; i < leds.Length; i++)
         {
-            SetLedEmission(leds[i],
+            leds[i].Toggle(
                 (i < leds.Length/4 && firstTap > 0) ||
                 (i >= leds.Length/4 && i < leds.Length/2 && firstTapWait > 1) ||
                 (i >= leds.Length/2 && i < leds.Length*3/4 && secondTap > 0) ||
@@ -188,7 +151,7 @@ public class SceneLayersManager : MonoBehaviour
 
         if (firstTapWait > 1 && secondTapWait > 1)
         {
-            if (firstTap != firstTapReq || secondTap != secondTapReq) { ledsFlickerTime = 1; }
+            if (firstTap != firstTapReq || secondTap != secondTapReq) { Led.FlickerLeds(leds, 1); }
             else { layersCompleted[layerIndex] = true; }
 
             firstTap = 0;
