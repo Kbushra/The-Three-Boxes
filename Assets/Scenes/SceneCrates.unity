@@ -1859,6 +1859,10 @@ PrefabInstance:
       propertyPath: targetScene
       value: 
       objectReference: {fileID: 102900000, guid: 97ab3f96f26348b43b5c7ab9d528144f, type: 3}
+    - target: {fileID: 7462335557732608269, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8888321524366099211, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5
@@ -1900,7 +1904,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2901460547925873735, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65387d55dc10d3348915616ef2aa86bc, type: 3}

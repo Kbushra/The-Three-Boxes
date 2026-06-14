@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using HelperFunctions;
 using UnityEngine;
+using UnityEngine.LowLevel;
 
 public class SceneCandlesManager : MonoBehaviour
 {
@@ -14,11 +16,21 @@ public class SceneCandlesManager : MonoBehaviour
     [SerializeField] private GameObject crypticPaintingFlame;
 
     [SerializeField] private Button[] keypad;
-    [SerializeField] private Led[] leds;
+    [SerializeField] private Led[] keypadLeds = new Led[4];
+
+    [SerializeField] private Button timedButton;
+
+    [SerializeField] private Button finalButton;
+
+    [SerializeField] private Door[] doors = new Door[3];
 
     private List<int> symbol = new List<int>();
+    public bool keypadSuccess = false;
+    private int[] times = { 0, 0, 0, 0 };
+    public bool timedSuccess = false;
 
     private LightmapData[] lightmaps;
+    private LightProbes lightProbes;
     private Dictionary<Renderer, int> rendererIndices = new Dictionary<Renderer, int>();
 
     private void Awake()
@@ -43,9 +55,22 @@ public class SceneCandlesManager : MonoBehaviour
             errored = true;
         }
 
+        if (keypadLeds.Length < 4)
+        {
+            Debug.LogError("Invalid scene candle manager fields! Please add four keypad LEDs.");
+            errored = true;
+        }
+
+        if (doors.Length < 3)
+        {
+            Debug.LogError("Invalid scene candle manager fields! Please add three doors.");
+            errored = true;
+        }
+
         if (errored) { Destroy(this); return; }
 
         lightmaps = LightmapSettings.lightmaps;
+        lightProbes = LightmapSettings.lightProbes;
     }
 
     private void Start()
@@ -65,8 +90,9 @@ public class SceneCandlesManager : MonoBehaviour
         {
             altRealmObj.SetActive(realmPivot.activeSelf);
         }
-
+        
         LightmapSettings.lightmaps = !realmPivot.activeSelf ? lightmaps : null;
+        LightmapSettings.lightProbes = !realmPivot.activeSelf ? lightProbes : null;
         Renderer[] renderers = FindObjectsByType<Renderer>();
         foreach (Renderer renderer in renderers)
         {
@@ -80,10 +106,9 @@ public class SceneCandlesManager : MonoBehaviour
         }
     }
 
-    private void CrypticPaintingDialogue()
+    private void CrypticPaintingKeypadDialogue()
     {
-        crypticPainting.corrupt = realmPivot.activeSelf;
-        if (!crypticPainting.corrupt) { crypticPainting.text = "Just a door..."; return; }
+        if (!crypticPainting.corrupt) { return; }
 
         if (crypticPaintingFlame.activeSelf)
         {
@@ -131,49 +156,134 @@ public class SceneCandlesManager : MonoBehaviour
 
     private void KeypadLeds()
     {
-        bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
-        if (!realmPivot.activeSelf || !interacted || !realmPivot.GetComponentInParent<BlueBulb>().interactable) { return; }
+        if (!realmPivot.activeSelf) { return; }
 
-        Led.ResetLedFlickers(leds);
+        Led.ResetLedFlickers(keypadLeds);
         if (crypticPaintingFlame.activeSelf) { return; }
 
         bool success = false;
-        Led led = leds[0];
+        Led led = keypadLeds[0];
 
         if (keyPaintingFlame.activeSelf && oceanPaintingFlame.activeSelf)
         {
             List<int> diamond = new List<int> { 1, 3, 5, 7 };
             success = symbol.OrderBy(el => el).SequenceEqual(diamond.OrderBy(x => x));
-            led = leds[0];
+            led = keypadLeds[0];
         }
         else if (keyPaintingFlame.activeSelf)
         {
             List<int> keyK = new List<int> { 0, 2, 3, 4, 6, 8 };
             success = symbol.OrderBy(el => el).SequenceEqual(keyK.OrderBy(x => x));
-            led = leds[1];
+            led = keypadLeds[1];
         }
         else if (oceanPaintingFlame.activeSelf)
         {
             List<int> boat = new List<int> { 3, 5, 6, 7, 8 };
             success = symbol.OrderBy(el => el).SequenceEqual(boat.OrderBy(x => x));
-            led = leds[2];
+            led = keypadLeds[2];
         }
         else
         {
             success = symbol.Count == 0;
-            led = leds[3];
+            led = keypadLeds[3];
         }
 
-        Debug.Log( string.Join(", ", symbol.OrderBy(x => x)) );
         if (success) { led.Toggle(true); } else { led.flickerTime = 1; }
         symbol.Clear();
+
+        keypadSuccess = Led.LedsOn(keypadLeds);
+    }
+
+    private void CrypticPaintingTimedDialogue()
+    {
+        if (!crypticPainting.corrupt) { return; }
+
+        if (!crypticPaintingFlame.activeSelf)
+        {
+            //A button, held for the total of all three times. Each time randomly chosen through blue fire.
+            crypticPainting.text = "T wpmmfd, cyan sfi mcy mfmta fs taa mciyy mlbyj. Ytec mlby itdnfbax ecfjyd mcifpvc wapy sliy.";
+            return;
+        }
+
+        int timedIndex = 0;
+        string paintingText = "";
+        if (keyPaintingFlame.activeSelf && oceanPaintingFlame.activeSelf)
+        {
+            //The key and ocean choose
+            paintingText = "Mcy kyx tdn feytd ecffjy";
+            timedIndex = 0;
+        }
+        else if (keyPaintingFlame.activeSelf) 
+        {
+            //The key chooses
+            paintingText = "Mcy kyx ecffjyj";
+            timedIndex = 1;
+        }
+        else if (oceanPaintingFlame.activeSelf)
+        {
+            //The ocean chooses
+            paintingText = "Mcy feytd ecffjyj";
+            timedIndex = 2;
+        }
+        else
+        {
+            //The void chooses
+            paintingText = "Mcy qfln ecffjyj";
+            timedIndex = 3;
+        }
+
+        //ONE, TWO, THREE
+        string[] possibleTimes = { "FDY", "MRF", "MCIYY" };
+        int randIndex = (int)Mathf.Floor(Random.value * 2.99f);
+        crypticPainting.text = $"{paintingText}: {possibleTimes[randIndex]}";
+        times[timedIndex] = randIndex + 1;
+    }
+
+    private void Update()
+    {
+        bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
+
+        crypticPainting.corrupt = realmPivot.activeSelf;
+        if (!crypticPainting.corrupt) { crypticPainting.text = "Just a door..."; }
+
+        if (!keypadSuccess)
+        {
+            CrypticPaintingKeypadDialogue();
+            return;
+        }
+
+        if (!timedSuccess)
+        {
+            if (interacted && crypticPainting.interactable) { CrypticPaintingTimedDialogue(); }
+            return;
+        }
     }
 
     private void LateUpdate()
     {
+        bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
+        bool swappedRealm = interacted && realmPivot.GetComponentInParent<BlueBulb>().interactable;
+
         RealmTransition();
-        CrypticPaintingDialogue();
-        InterpretKeypad();
-        KeypadLeds();
+        
+        if (!keypadSuccess)
+        {
+            InterpretKeypad();
+            if (swappedRealm) { KeypadLeds(); }
+            return;
+        }
+
+        doors[0].open = true;
+
+        if (!timedSuccess)
+        {
+            float totalTime = times.Aggregate((prev, el) => prev + el);
+            if (!times.Contains(0) && Maths.NearEquals(timedButton.fullHoldLength, totalTime, 0.5f)) { timedSuccess = true; }
+            return;
+        }
+
+        doors[1].open = true;
+
+        if (finalButton.fullHoldLength > 0) { doors[2].open = true; }
     }
 }
