@@ -8,7 +8,7 @@ namespace HelperFunctions
     {
         public static bool MoveFree(in Rigidbody rigidbodyComponent, in Vector3 move, out RaycastHit info, float padding = 0.1f)
         {
-            info = new RaycastHit();
+            info = new RaycastHit(); info.distance = 0;
             if (!rigidbodyComponent.gameObject.activeSelf) { return true; }
 
             bool success = !rigidbodyComponent.SweepTest(move.normalized, out info, move.magnitude, QueryTriggerInteraction.Ignore);
@@ -17,9 +17,9 @@ namespace HelperFunctions
             return success;
         }
 
-        public static bool CapsuleFree(in CapsuleCollider capsuleComponent, in Vector3 move, out RaycastHit info, float padding = 0.1f)
+        public static bool CapsuleFree(in CapsuleCollider capsuleComponent, in Vector3 move, out RaycastHit info, float padding = 0.1f, string layerName = "Solids")
         {
-            info = new RaycastHit();
+            info = new RaycastHit(); info.distance = 0;
             if (!capsuleComponent.enabled) { return true; }
 
             float scale = capsuleComponent.transform.lossyScale.y;
@@ -28,21 +28,21 @@ namespace HelperFunctions
             Vector3 center = capsuleComponent.transform.TransformPoint(capsuleComponent.center);
             Vector3 centerToPoint = capsuleComponent.transform.up * (height/2 - radius);
             bool success = !Physics.CapsuleCast(center + centerToPoint, center - centerToPoint, radius, move.normalized, out info,
-                move.magnitude, LayerMask.GetMask("Solids"), QueryTriggerInteraction.Ignore);
+                move.magnitude, LayerMask.GetMask(layerName), QueryTriggerInteraction.Ignore);
             
             info.distance = Math.Clamp(info.distance - padding, 0, move.magnitude);
             return success;
         }
 
-        public static bool BoxFree(in BoxCollider boxComponent, in Vector3 move, out RaycastHit info, float padding = 0.1f)
+        public static bool BoxFree(in BoxCollider boxComponent, in Vector3 move, out RaycastHit info, float padding = 0.1f, string layerName = "Solids")
         {
-            info = new RaycastHit();
+            info = new RaycastHit(); info.distance = 0;
             if (!boxComponent.enabled) { return true; }
 
             Vector3 center = boxComponent.transform.TransformPoint(boxComponent.center);
             Vector3 halfExtents = Vector3.Scale(boxComponent.size * 0.5f, boxComponent.transform.lossyScale);
             bool success = !Physics.BoxCast(center, halfExtents, move.normalized, out info, boxComponent.transform.rotation,
-                move.magnitude, LayerMask.GetMask("Solids"), QueryTriggerInteraction.Ignore);
+                move.magnitude, LayerMask.GetMask(layerName), QueryTriggerInteraction.Ignore);
             
             info.distance = Math.Clamp(info.distance - padding, 0, move.magnitude);
             return success;

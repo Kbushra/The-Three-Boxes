@@ -88,37 +88,57 @@ public class Player : MonoBehaviour
         cameraComponent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
     }
 
-    private void CheckAxis(Vector3 leftoverMove, Vector3 mask)
+    private bool SpaceFree(in BoxCollider boxComponent, in Vector3 move, out RaycastHit info, out RaycastHit infoCurved)
+    {
+        info = new RaycastHit(); info.distance = 0;
+        infoCurved = new RaycastHit(); infoCurved.distance = 0;
+        return Collisions.BoxFree(boxComponent, move, out info) &&
+            Collisions.BoxFree(boxComponent, move, out infoCurved, 0.1f, "CurvedGeometry");
+    }
+
+    private bool CheckAxis(Vector3 leftoverMove, Vector3 mask)
     {
         Vector3 filteredMove = Vector3.Scale(leftoverMove, mask);
 
-        if (Collisions.BoxFree(boxComponent, filteredMove, out RaycastHit info)) { transform.position += filteredMove; return; }
-        transform.position += Vector3.Scale(Maths.RepeatNum(info.distance), mask);
+        if (SpaceFree(boxComponent, filteredMove, out RaycastHit info, out RaycastHit infoCurved))
+        { transform.position += filteredMove; return false; }
+
+        transform.position += mask * Mathf.Min(info.distance, infoCurved.distance);
+        return true;
     }
 
     private void Move()
     {
-        Vector3 move = speed * Time.deltaTime * MovementVector(); move.y = vsp;
+        Vector3 move = speed * Time.deltaTime * MovementVector();
 
-        bool inAir = Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _);
+        bool inAir = SpaceFree(boxComponent, new Vector3(0, -0.2f, 0), out _, out _);
         if (vsp <= 0 && !inAir) { vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
         else { vsp -= Time.deltaTime * gravity; }
-
-        bool hitCeiling = !Collisions.BoxFree(boxComponent, new Vector3(0, 0.1f, 0), out _);
-        if (vsp > 0 && hitCeiling) { vsp = 0; }
-        else { vsp = Mathf.Clamp(vsp, -0.5f, 0.5f); }
+        
+        vsp = Mathf.Clamp(vsp, -0.5f, 0.5f);
+        move.y = vsp;
         
         if (move.magnitude < 0.01f) { return; }
 
-        if (Collisions.BoxFree(boxComponent, move, out RaycastHit info)) { transform.position += move; return; }
+        //Walk above curved geometry
+        Vector3 offsetVector = new Vector3(0, 0.1f, 0);
+        while (!Collisions.BoxFree(boxComponent, move, out _, 0.1f, "CurvedGeometry") &&
+        Collisions.BoxFree(boxComponent, offsetVector, out _))
+        {
+            transform.position += offsetVector;
+            vsp = 0; move.y = 0;
+        }
+
+        if (SpaceFree(boxComponent, move, out RaycastHit info, out RaycastHit infoCurved)) { transform.position += move; return; }
 
         Vector3 leftoverMove = move;
-        move *= info.distance / move.magnitude;
+        float scale = Mathf.Min(info.distance, infoCurved.distance) / move.magnitude;
+        vsp *= scale; move *= scale;
         transform.position += move;
         leftoverMove -= move;
         
         CheckAxis(leftoverMove, Vector3.right);
-        CheckAxis(leftoverMove, Vector3.up);
+        if (CheckAxis(leftoverMove, Vector3.up)) { vsp = 0; }
         CheckAxis(leftoverMove, Vector3.forward);
     }
 
@@ -144,7 +164,15 @@ public class Player : MonoBehaviour
         Vector3 startPosition = transform.position;
         Move();
 
-        bool inAir = Collisions.BoxFree(boxComponent, new Vector3(0, -0.2f, 0), out _);
+        //Snap to curved geometry
+        if (vsp <= 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, Mathf.Min(-0.11f, vsp), 0),
+        out RaycastHit snapInfo, 0.04f, "CurvedGeometry"))
+        {
+            transform.position += new Vector3(0, -snapInfo.distance, 0);
+            vsp = 0;
+        }
+
+        bool inAir = SpaceFree(boxComponent, new Vector3(0, -0.2f, 0), out _, out _);
         bool notMoving = transform.position.x == startPosition.x && transform.position.z == startPosition.z;
         if (inAir || notMoving) { moveTime = Maths.LerpDelta(moveTime, Maths.RoundNearest(moveTime, Mathf.PI), 0.9f); }
         else { moveTime += Time.deltaTime * 10; }
