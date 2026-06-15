@@ -60,6 +60,11 @@ namespace HelperFunctions
 
     public static class Maths
     {
+        public static int Mod(int a, int modulus)
+        {
+            return (a % modulus + modulus) % modulus;
+        }
+
         public static bool NearEquals(float a, float b, float precision = 0.1f)
         {
             return Mathf.Abs(a - b) <= precision;

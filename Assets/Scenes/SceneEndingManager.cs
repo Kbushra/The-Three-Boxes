@@ -9,7 +9,7 @@ public class SceneEndingManager : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Door door;
     [SerializeField] private BoxCollider endTrigger;
-    [SerializeField] private GameObject fader;
+    [SerializeField] private GameObject fadeEffect;
     [SerializeField] private SceneAsset targetScene;
 
     private BoxCollider playerCollider;
@@ -34,8 +34,8 @@ public class SceneEndingManager : MonoBehaviour
 
         if (!playerCollider || !canvas || FindObjectsByType<FadeRoom>().Length > 0 ||
         Collisions.BoxCollisions(endTrigger).Contains(playerCollider)) { return; }
-        
-        GameObject fadeInstance = Instantiate(fader, canvas.transform);
-        fadeInstance.GetComponent<FadeRoom>().targetScene = targetScene;
+
+        Player.spawnMainMenu = true;
+        Instantiate(fadeEffect, canvas.transform);
     }
 }

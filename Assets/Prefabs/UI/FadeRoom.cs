@@ -7,15 +7,14 @@ using UnityEngine.SceneManagement;
 public class FadeRoom : FadeEffect
 {
     public SceneAsset targetScene;
-    private bool transitioned = false;
+    public string targetSceneName;
 
     protected override void Update()
     {
         base.Update();
-        if (fadingOut && !transitioned)
+        if (fadingOut && transitioned)
         {
-            SceneManager.LoadScene(targetScene.name);
-            transitioned = true;
+            SceneManager.LoadScene(targetScene ? targetScene.name : targetSceneName);
         }
     }
 }

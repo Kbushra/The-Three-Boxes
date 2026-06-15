@@ -300,3 +300,4 @@ MonoBehaviour:
   gravity: 0.8
   cameraContainer: {fileID: 2103501428317791660}
   cameraComponent: {fileID: 4963017189415757777}
+  pauseMenu: {fileID: 6342314655337610750, guid: a11a35cb5e001e9469813b77e25cfb6e, type: 3}

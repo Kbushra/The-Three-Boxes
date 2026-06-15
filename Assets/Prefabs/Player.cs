@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public static List<State> stateQueue = new List<State>();
     public static Inputs inputs;
     public static Player player;
+    public static bool spawnMainMenu;
 
     public float speed = 5;
     public float sensitivity = 10;
@@ -19,6 +20,9 @@ public class Player : MonoBehaviour
     private BoxCollider boxComponent;
     [SerializeField] private Transform cameraContainer;
     [SerializeField] private Camera cameraComponent;
+    [SerializeField] private GameObject pauseMenu;
+
+    private Canvas canvas;
 
     private float yaw = 0;
     private float pitch = 0;
@@ -56,6 +60,12 @@ public class Player : MonoBehaviour
         if (errored) { Destroy(this); return; }
         
         cameraStartY = cameraComponent.transform.localPosition.y;
+    }
+
+    private void Start()
+    {
+        canvas = SingleCanvas.canvas;
+        if (!canvas) { Debug.LogWarning("Canvas not found!"); }
     }
 
     private void OnEnable()
@@ -158,6 +168,9 @@ public class Player : MonoBehaviour
         #endif
 
         UpdateState();
+
+        if (inputs.FindAction("General/Menu").WasPressedThisFrame() && FindObjectsByType<PauseMenu>().Length == 0)
+        { Instantiate(pauseMenu, canvas.transform); return; }
 
         if (state != State.Locked) { Look(); }
 
