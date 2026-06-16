@@ -7,9 +7,8 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI backText;
     [SerializeField] private TextMeshProUGUI toMainText;
-    [SerializeField] private GameObject fadeEffect;
 
-    private int selection;
+    private int selection = 0;
     private Canvas canvas;
 
     private void Awake()
@@ -31,37 +30,52 @@ public class PauseMenu : MonoBehaviour
         if (errored) { Destroy(this); return; }
     }
 
+    private void Select(TextMeshProUGUI mesh, string text, int reqSelection, bool instant)
+    {
+        mesh.text = selection == reqSelection ? $"> {text} <" : text;
+        mesh.fontSize = Maths.LerpDelta(mesh.fontSize, selection == reqSelection ? 36 : 32, instant ? 1 : 0.995f);
+    }
+
+    private void SelectAll(bool instant)
+    {
+        Select(backText, "BACK", 0, instant);
+        Select(toMainText, "MAIN MENU", 1, instant);
+    }
+
     private void Start()
     {
         canvas = SingleCanvas.canvas;
         if (!canvas) { Debug.LogWarning("Canvas not found!"); }
+
+        SelectAll(true);
     }
 
     private void Update()
     {
         Player.stateQueue.Add(Player.State.Locked);
+        if (Player.state == Player.State.MainMenu) { Destroy(gameObject); return; }
 
-        FadeEffect[] fadeEffects = FindObjectsByType<FadeEffect>();
-        if (fadeEffects.Length > 0)
-        {
-            if (fadeEffects[0].transitioned) { Destroy(gameObject); }
-            if (!fadeEffects[0].fadingOut) { return; }
-        }
-
-        if (Player.inputs.FindAction("General/Menu").WasPressedThisFrame()) { Destroy(gameObject); return; }
+        FadeRoom[] faders = FindObjectsByType<FadeRoom>();
+        if (faders.Length > 0 && !faders[0].fadingOut) { SelectAll(false); return; }
 
         bool up = Player.inputs.FindAction("General/Up").WasPressedThisFrame();
         bool down = Player.inputs.FindAction("General/Down").WasPressedThisFrame();
-        Debug.Log($"{(up ? -1 : (down ? 1 : 0))} - {selection}");
+
         selection += up ? -1 : (down ? 1 : 0);
         selection = Maths.Mod(selection, 2);
+        SelectAll(false);
 
-        backText.text = selection == 0 ? "> BACK <" : "BACK";
-        toMainText.text = selection == 1 ? "> MAIN MENU <" : "MAIN MENU";
+        if (Player.inputs.FindAction("General/Menu").WasPressedThisFrame() ||
+        Player.inputs.FindAction("General/Deny").WasPressedThisFrame()) { Destroy(gameObject); return; }
 
-        if (!Player.inputs.FindAction("General/Interact").WasPressedThisFrame()) { return; }
+        if (!Player.inputs.FindAction("General/Confirm").WasPressedThisFrame()) { return; }
 
         if (selection == 0) { Destroy(gameObject); return; }
-        if (selection == 1) { Player.spawnMainMenu = true; Instantiate(fadeEffect, canvas.transform); }
+        if (selection == 1)
+        {
+            Player.openMainMenu = true;
+            FadeRoom faderInstance = FadeRoom.Fade();
+            faderInstance.targetSceneName = SceneManager.GetActiveScene().name;
+        }
     }
 }

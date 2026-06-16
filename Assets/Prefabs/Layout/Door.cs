@@ -25,7 +25,6 @@ public class Door : MonoBehaviour
     [SerializeField] private AudioSource lightSteam;
     [SerializeField] private AudioSource heavySteam;
     [SerializeField] private AudioSource steps;
-    [SerializeField] private GameObject fader;
     [SerializeField] private GameObject bigParticles;
     [SerializeField] private GameObject smallParticles;
 
@@ -74,12 +73,6 @@ public class Door : MonoBehaviour
         if (!targetScene)
         {
             Debug.LogError("Invalid door fields! Please add the target scene.");
-            errored = true;
-        }
-
-        if (!fader)
-        {
-            Debug.LogError("Invalid door fields! Please add the fader prefab.");
             errored = true;
         }
 
@@ -171,7 +164,7 @@ public class Door : MonoBehaviour
         if (FindObjectsByType<FadeRoom>().Length > 0) { return; }
 
         steps.Play();
-        GameObject fadeInstance = Instantiate(fader, canvas.transform);
-        fadeInstance.GetComponent<FadeRoom>().targetScene = targetScene;
+        FadeRoom faderInstance = FadeRoom.Fade();
+        faderInstance.targetSceneName = targetScene.name;
     }
 }

@@ -163,6 +163,24 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""23307494-77c2-4bbb-8226-ef5d57147e0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Deny"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe158912-c810-4190-a277-66a780e7f6ca"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -451,6 +469,61 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b569edcb-b390-4934-be77-177085e3f28b"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b67c5ca0-025c-49f9-a689-b3cd55978dfa"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2dc1cf67-d73d-4ed5-a351-f39835f60ea1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4921e90-533c-4762-a50e-3733019f5f76"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Deny"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9c504b4-17b8-4dc8-abdd-6ccead3d1284"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Deny"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -528,6 +601,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         m_General_Menu = m_General.FindAction("Menu", throwIfNotFound: true);
         m_General_Up = m_General.FindAction("Up", throwIfNotFound: true);
         m_General_Down = m_General.FindAction("Down", throwIfNotFound: true);
+        m_General_Confirm = m_General.FindAction("Confirm", throwIfNotFound: true);
+        m_General_Deny = m_General.FindAction("Deny", throwIfNotFound: true);
     }
 
     ~@Inputs()
@@ -616,6 +691,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_General_Menu;
     private readonly InputAction m_General_Up;
     private readonly InputAction m_General_Down;
+    private readonly InputAction m_General_Confirm;
+    private readonly InputAction m_General_Deny;
     /// <summary>
     /// Provides access to input actions defined in input action map "General".
     /// </summary>
@@ -659,6 +736,14 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "General/Down".
         /// </summary>
         public InputAction @Down => m_Wrapper.m_General_Down;
+        /// <summary>
+        /// Provides access to the underlying input action "General/Confirm".
+        /// </summary>
+        public InputAction @Confirm => m_Wrapper.m_General_Confirm;
+        /// <summary>
+        /// Provides access to the underlying input action "General/Deny".
+        /// </summary>
+        public InputAction @Deny => m_Wrapper.m_General_Deny;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -709,6 +794,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Down.started += instance.OnDown;
             @Down.performed += instance.OnDown;
             @Down.canceled += instance.OnDown;
+            @Confirm.started += instance.OnConfirm;
+            @Confirm.performed += instance.OnConfirm;
+            @Confirm.canceled += instance.OnConfirm;
+            @Deny.started += instance.OnDeny;
+            @Deny.performed += instance.OnDeny;
+            @Deny.canceled += instance.OnDeny;
         }
 
         /// <summary>
@@ -744,6 +835,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Down.started -= instance.OnDown;
             @Down.performed -= instance.OnDown;
             @Down.canceled -= instance.OnDown;
+            @Confirm.started -= instance.OnConfirm;
+            @Confirm.performed -= instance.OnConfirm;
+            @Confirm.canceled -= instance.OnConfirm;
+            @Deny.started -= instance.OnDeny;
+            @Deny.performed -= instance.OnDeny;
+            @Deny.canceled -= instance.OnDeny;
         }
 
         /// <summary>
@@ -905,5 +1002,19 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Deny" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDeny(InputAction.CallbackContext context);
     }
 }

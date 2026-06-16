@@ -301,3 +301,6 @@ MonoBehaviour:
   cameraContainer: {fileID: 2103501428317791660}
   cameraComponent: {fileID: 4963017189415757777}
   pauseMenu: {fileID: 6342314655337610750, guid: a11a35cb5e001e9469813b77e25cfb6e, type: 3}
+  mainMenu: {fileID: 4229802756483557707, guid: e9fac6ada1b0c74469cbd0014952fc2e, type: 3}
+  mainMenuView: {fileID: 0}
+  fader: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}

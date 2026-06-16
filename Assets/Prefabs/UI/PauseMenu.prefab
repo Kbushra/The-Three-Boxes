@@ -229,8 +229,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -326,4 +326,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   backText: {fileID: 2768538491200304407}
   toMainText: {fileID: 4223046012388332890}
-  fadeEffect: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}
+  fader: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}

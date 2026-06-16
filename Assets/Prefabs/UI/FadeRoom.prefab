@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5420362152871326572}
   - component: {fileID: 7954918470745071109}
   - component: {fileID: 5599510548946332004}
-  - component: {fileID: 2093137526965352956}
+  - component: {fileID: 1148048467285892951}
   m_Layer: 5
-  m_Name: FadeEffect
+  m_Name: FadeRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2093137526965352956
+--- !u!114 &1148048467285892951
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,10 +85,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2270455170245618123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6bf376b45cc0294399678167bba0506, type: 3}
+  m_Script: {fileID: 11500000, guid: 5619975b6c0052e4caa7ab9bcb0f2571, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FadeEffect
+  m_EditorClassIdentifier: Assembly-CSharp::Fade
   fadingOut: 0
   spd: 0.5
   hold: 0
-  transitioned: 0
+  targetScene: {fileID: 0}
+  targetSceneName: 
+  faderNonstatic: {fileID: 2270455170245618123}

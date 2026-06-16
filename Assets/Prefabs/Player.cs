@@ -2,16 +2,19 @@ using UnityEngine;
 using HelperFunctions;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Player : MonoBehaviour
 {
-    public enum State { Normal, Frozen, Locked };
+    public enum State { MainMenu, Normal, Frozen, Locked };
     public static State state { get; private set; } = State.Normal;
     public static List<State> stateQueue = new List<State>();
     public static Inputs inputs;
     public static Player player;
-    public static bool spawnMainMenu;
+    public static bool openMainMenu;
+    public static bool closeMainMenu;
+    private static float mainMenuCameraSpin = 0;
 
     public float speed = 5;
     public float sensitivity = 10;
@@ -21,6 +24,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform cameraContainer;
     [SerializeField] private Camera cameraComponent;
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private Transform mainMenuView;
+
+    [SerializeField] private GameObject fader;
 
     private Canvas canvas;
 
@@ -57,6 +64,25 @@ public class Player : MonoBehaviour
             errored = true;
         }
 
+        if (!pauseMenu)
+        {
+            Debug.LogError("Invalid player fields! Please add the pause menu.");
+            errored = true;
+        }
+
+        if (!mainMenu)
+        {
+            Debug.LogError("Invalid player fields! Please add the main menu.");
+            errored = true;
+        }
+
+        if (!fader)
+        {
+            Debug.LogError("Invalid player fields! Please add the fader.");
+            errored = true;
+        }
+        else { FadeRoom.fader = fader; }
+
         if (errored) { Destroy(this); return; }
         
         cameraStartY = cameraComponent.transform.localPosition.y;
@@ -66,6 +92,13 @@ public class Player : MonoBehaviour
     {
         canvas = SingleCanvas.canvas;
         if (!canvas) { Debug.LogWarning("Canvas not found!"); }
+
+        if (!mainMenuView)
+        {
+            Debug.LogWarning("Main menu view not found!");
+            mainMenuView = new GameObject().transform;
+            mainMenuView.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+        }
     }
 
     private void OnEnable()
@@ -131,7 +164,7 @@ public class Player : MonoBehaviour
         if (move.magnitude < 0.01f) { return; }
 
         //Walk above curved geometry
-        Vector3 offsetVector = new Vector3(0, 0.1f, 0);
+        Vector3 offsetVector = new Vector3(0, 0.05f, 0);
         while (!Collisions.BoxFree(boxComponent, move, out _, 0.1f, "CurvedGeometry") &&
         Collisions.BoxFree(boxComponent, offsetVector, out _))
         {
@@ -143,7 +176,7 @@ public class Player : MonoBehaviour
 
         Vector3 leftoverMove = move;
         float scale = Mathf.Min(info.distance, infoCurved.distance) / move.magnitude;
-        vsp *= scale; move *= scale;
+        move *= scale;
         transform.position += move;
         leftoverMove -= move;
         
@@ -152,8 +185,33 @@ public class Player : MonoBehaviour
         CheckAxis(leftoverMove, Vector3.forward);
     }
 
+    private void MainMenuMovement()
+    {
+        if (FindObjectsByType<MainMenu>().Length == 0) { Instantiate(mainMenu, canvas.transform); }
+
+        transform.position = mainMenuView.position;
+        cameraContainer.transform.localRotation = Quaternion.Euler(30, mainMenuCameraSpin, 0);
+        mainMenuCameraSpin += Time.deltaTime * 3;
+    }
+
     private void UpdateState()
     {
+        FadeRoom[] faders = FindObjectsByType<FadeRoom>();
+        bool effectTransition = faders.Length > 0 && faders[0].fadingOut;
+        if (openMainMenu && effectTransition)
+        {
+            openMainMenu = false;
+            state = State.MainMenu;
+        }
+
+        if (closeMainMenu && effectTransition)
+        {
+            closeMainMenu = false;
+            state = State.Normal;
+        }
+
+        if (state == State.MainMenu) { return; }
+
         if (stateQueue.Contains(State.Locked)) { state = State.Locked; }
         else if (stateQueue.Contains(State.Frozen)) { state = State.Frozen; }
         else { state = State.Normal; }
@@ -168,6 +226,7 @@ public class Player : MonoBehaviour
         #endif
 
         UpdateState();
+        if (state == State.MainMenu) { MainMenuMovement(); return; }
 
         if (inputs.FindAction("General/Menu").WasPressedThisFrame() && FindObjectsByType<PauseMenu>().Length == 0)
         { Instantiate(pauseMenu, canvas.transform); return; }
@@ -178,7 +237,7 @@ public class Player : MonoBehaviour
         Move();
 
         //Snap to curved geometry
-        if (vsp <= 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, Mathf.Min(-0.11f, vsp), 0),
+        if (vsp <= 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, Mathf.Min(-0.2f, vsp), 0),
         out RaycastHit snapInfo, 0.04f, "CurvedGeometry"))
         {
             transform.position += new Vector3(0, -snapInfo.distance, 0);
