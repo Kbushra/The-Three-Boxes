@@ -22,7 +22,7 @@ public class Scene1Manager : MonoBehaviour
         if (step == 0 || step == 1)
         {
             Vector2 move = Player.inputs.FindAction("General/Move").ReadValue<Vector2>();
-            if (move.x != 0 || move.y != 0)
+            if (Player.state == Player.State.Normal && (move.x != 0 || move.y != 0))
             {
                 if (messageInstance) { messageInstance.fade = true; }
 
@@ -36,7 +36,7 @@ public class Scene1Manager : MonoBehaviour
             
             step = 1;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
-            messageInstance.message = "WASD/Arrows to move, CURSOR to look";
+            messageInstance.message = "WASD/ARROWS to move, CURSOR to look";
             messageInstance.fadeAfter = false;
         }
 
@@ -72,6 +72,7 @@ public class Scene1Manager : MonoBehaviour
 
     private void Update()
     {
+        if (Player.state == Player.State.MainMenu) { return; }
         ManageSteps();
         ManagePuzzle();   
     }

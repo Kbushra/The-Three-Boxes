@@ -159,7 +159,7 @@ public class SceneCandlesManager : MonoBehaviour
         if (!realmPivot.activeSelf) { return; }
 
         Led.ResetLedFlickers(keypadLeds);
-        if (crypticPaintingFlame.activeSelf) { return; }
+        if (crypticPaintingFlame.activeSelf) { symbol.Clear(); return; }
 
         bool success = false;
         Led led = keypadLeds[0];

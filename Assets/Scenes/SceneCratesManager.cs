@@ -43,6 +43,10 @@ public class SceneCratesManager : MonoBehaviour
 
         canvas = SingleCanvas.canvas;
         if (!canvas) { Debug.LogWarning("Canvas not found!"); }
+
+        if (Player.state == Player.State.MainMenu && !Player.closeMainMenu) { return; }
+        messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
+        messageInstance.message = "TAB to toggle pause menu, Z/E/ENTER to confirm, X/SHIFT to deny";
     }
 
     private void ManageSteps()

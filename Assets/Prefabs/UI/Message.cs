@@ -51,7 +51,8 @@ public class Message : MonoBehaviour
 
         transform.localPosition = new Vector3(transform.localPosition.x, Maths.LerpDelta(transform.localPosition.y, targY, 0.8f), transform.localPosition.z);
 
-        if (shifts >= 1) { fade = true; }
+        FadeEffect[] faders = FindObjectsByType<FadeRoom>();
+        if (shifts >= 1 || (faders.Length > 0 && !faders[0].fadingOut)) { fade = true; }
         float targAlpha = fade ? 0 : 1;
         float time = shifts == 0 && !fade ? 0.5f : (shifts == 1 || fade ? 0.99f : 0.998f);
         textComponent.color = new Color(1, 1, 1, Maths.LerpDelta(textComponent.color.a, targAlpha, time));
