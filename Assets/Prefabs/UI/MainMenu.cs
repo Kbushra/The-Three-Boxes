@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour
     private int[] selection = { 0, 0 };
     private int page = 0;
     private Canvas canvas;
+    private FadeRoom faderInstance;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class MainMenu : MonoBehaviour
         Select(levelSelectText, "LEVELS", 32, 0, 1, instant);
         for (int i = 0; i < levelTexts.Length; i++)
         {
+            levelTexts[i].gameObject.SetActive(i <= Saving.saveData.currentLevel);
             Select(levelTexts[i], levelNames[i], 24, 1, i, instant);
         }
 
@@ -85,13 +87,12 @@ public class MainMenu : MonoBehaviour
     {
         if (Player.state != Player.State.MainMenu) { Destroy(gameObject); return; }
         
-        FadeRoom[] faders = FindObjectsByType<FadeRoom>();
-        if (faders.Length != 0 && !faders[0].fadingOut) { SelectAll(false); return; }
+        if (faderInstance && !faderInstance.fadingOut) { SelectAll(false); return; }
 
         bool up = Player.inputs.FindAction("General/Up").WasPressedThisFrame();
         bool down = Player.inputs.FindAction("General/Down").WasPressedThisFrame();
         selection[page] += up ? -1 : (down ? 1 : 0);
-        selection[page] = Maths.Mod(selection[page], page == 0 ? 2 : levelTexts.Length);
+        selection[page] = Maths.Mod(selection[page], page == 0 ? 2 : Mathf.Min(Saving.saveData.currentLevel + 1, levelTexts.Length));
         SelectAll(false);
 
         if (Player.inputs.FindAction("General/Deny").WasPressedThisFrame()) { page = 0; selection[1] = 0; }
@@ -103,14 +104,14 @@ public class MainMenu : MonoBehaviour
             if (selection[0] == 0)
             {
                 Player.closeMainMenu = true;
-                FadeRoom faderInstance = FadeRoom.Fade();
+                faderInstance = FadeRoom.Fade();
                 faderInstance.targetSceneName = SceneManager.GetActiveScene().name;
             }
             else { page++; }
         }
         else
         {
-            FadeRoom faderInstance = FadeRoom.Fade();
+            faderInstance = FadeRoom.Fade();
             faderInstance.targetSceneName = levelScenes[selection[1]].name;
             faderInstance.spd = 2;
         }

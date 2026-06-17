@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 824852569514626403}
   - component: {fileID: 3441425187485494870}
   - component: {fileID: 7346862888560689879}
+  - component: {fileID: 4665889327854427457}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -304,3 +305,22 @@ MonoBehaviour:
   mainMenu: {fileID: 4229802756483557707, guid: e9fac6ada1b0c74469cbd0014952fc2e, type: 3}
   mainMenuView: {fileID: 0}
   fader: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}
+--- !u!114 &4665889327854427457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256595892804417299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874136c63fda74347b6781d099588012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Saving
+  levels:
+  - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+  - {fileID: 102900000, guid: 880b9c770bc43444cbcdc592c7eacd5b, type: 3}
+  - {fileID: 102900000, guid: 97ab3f96f26348b43b5c7ab9d528144f, type: 3}
+  - {fileID: 102900000, guid: 3fcc25d30d21fa441a5226f603190fc8, type: 3}
+  - {fileID: 102900000, guid: 07b1db4658045784aac463a0ad02b31a, type: 3}
+  - {fileID: 102900000, guid: c3e36207816f1c24ab8dcee40f59f2d7, type: 3}

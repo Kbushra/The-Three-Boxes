@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
 
     private int selection = 0;
     private Canvas canvas;
+    private FadeRoom faderInstance;
 
     private void Awake()
     {
@@ -55,8 +56,7 @@ public class PauseMenu : MonoBehaviour
         Player.stateQueue.Add(Player.State.Locked);
         if (Player.state == Player.State.MainMenu) { Destroy(gameObject); return; }
 
-        FadeRoom[] faders = FindObjectsByType<FadeRoom>();
-        if (faders.Length > 0 && !faders[0].fadingOut) { SelectAll(false); return; }
+        if (faderInstance && !faderInstance.fadingOut) { SelectAll(false); return; }
 
         bool up = Player.inputs.FindAction("General/Up").WasPressedThisFrame();
         bool down = Player.inputs.FindAction("General/Down").WasPressedThisFrame();
@@ -74,7 +74,7 @@ public class PauseMenu : MonoBehaviour
         if (selection == 1)
         {
             Player.openMainMenu = true;
-            FadeRoom faderInstance = FadeRoom.Fade();
+            faderInstance = FadeRoom.Fade();
             faderInstance.targetSceneName = SceneManager.GetActiveScene().name;
         }
     }

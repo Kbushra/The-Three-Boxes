@@ -257,6 +257,12 @@ public class SceneCandlesManager : MonoBehaviour
             if (interacted && crypticPainting.interactable) { CrypticPaintingTimedDialogue(); }
             return;
         }
+
+        if (crypticPainting.corrupt)
+        {
+            //Just a door...
+            crypticPainting.text = "Opjm t nffi...";
+        }
     }
 
     private void LateUpdate()

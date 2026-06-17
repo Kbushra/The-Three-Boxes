@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
         Vector3 move = speed * Time.deltaTime * MovementVector();
 
         bool inAir = SpaceFree(boxComponent, new Vector3(0, -0.2f, 0), out _, out _);
-        if (vsp <= 0 && !inAir) { vsp = inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
+        if (vsp <= 0 && !inAir) { vsp = state == State.Normal && inputs.FindAction("General/Jump").IsPressed() ? 0.2f : 0; }
         else { vsp -= Time.deltaTime * gravity; }
         
         vsp = Mathf.Clamp(vsp, -0.5f, 0.5f);
@@ -228,7 +228,7 @@ public class Player : MonoBehaviour
         UpdateState();
         if (state == State.MainMenu) { MainMenuMovement(); return; }
 
-        if (inputs.FindAction("General/Menu").WasPressedThisFrame() && FindObjectsByType<PauseMenu>().Length == 0)
+        if (state == State.Normal && inputs.FindAction("General/Menu").WasPressedThisFrame() && FindObjectsByType<PauseMenu>().Length == 0)
         { Instantiate(pauseMenu, canvas.transform); return; }
 
         if (state != State.Locked) { Look(); }
@@ -238,7 +238,7 @@ public class Player : MonoBehaviour
 
         //Snap to curved geometry
         if (vsp <= 0 && !Collisions.BoxFree(boxComponent, new Vector3(0, Mathf.Min(-0.2f, vsp), 0),
-        out RaycastHit snapInfo, 0.04f, "CurvedGeometry"))
+        out RaycastHit snapInfo, 0.06f, "CurvedGeometry"))
         {
             transform.position += new Vector3(0, -snapInfo.distance, 0);
             vsp = 0;

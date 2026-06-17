@@ -35,6 +35,7 @@ public class Door : MonoBehaviour
 
     public bool open = false;
     public SceneAsset targetScene;
+    public int levelIndex;
 
     private void Awake()
     {
@@ -166,5 +167,11 @@ public class Door : MonoBehaviour
         steps.Play();
         FadeRoom faderInstance = FadeRoom.Fade();
         faderInstance.targetSceneName = targetScene.name;
+
+        if (Saving.saveData.currentLevel < levelIndex)
+        {
+            Saving.saveData.currentLevel = levelIndex;
+            Saving.WriteSave();
+        }
     }
 }

@@ -37,5 +37,7 @@ public class SceneEndingManager : MonoBehaviour
         Player.openMainMenu = true;
         FadeRoom faderInstance = FadeRoom.Fade();
         faderInstance.targetSceneName = SceneManager.GetActiveScene().name;
+
+        Saving.saveData.currentLevel = 6;
     }
 }
