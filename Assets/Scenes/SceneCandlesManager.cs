@@ -284,7 +284,7 @@ public class SceneCandlesManager : MonoBehaviour
         if (!timedSuccess)
         {
             float totalTime = times.Aggregate((prev, el) => prev + el);
-            if (!times.Contains(0) && Maths.NearEquals(timedButton.fullHoldLength, totalTime, 0.5f)) { timedSuccess = true; }
+            if (!times.Contains(0) && Maths.NearEquals(timedButton.fullHoldLength, totalTime, 1)) { timedSuccess = true; }
             return;
         }
 

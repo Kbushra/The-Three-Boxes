@@ -33,6 +33,8 @@ public class FadeRoom : FadeEffect
         FadeRoom faderInstance = faders.Length > 0 ? faders[0] : Instantiate(fader, SingleCanvas.canvas.transform).GetComponent<FadeRoom>();
         faderInstance.fadingOut = false;
         faderInstance.transitioned = false;
+        faderInstance.spd = 1;
+        faderInstance.hold = 0;
         return faderInstance;
     }
 }

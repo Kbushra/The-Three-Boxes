@@ -2,8 +2,7 @@ using UnityEngine;
 using HelperFunctions;
 using System;
 using System.Linq;
-using UnityEditor;
-using System.Threading;
+using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
@@ -34,7 +33,6 @@ public class Door : MonoBehaviour
     private GameObject smallEndParticle;
 
     public bool open = false;
-    public SceneAsset targetScene;
     public int levelIndex;
 
     private void Awake()
@@ -68,12 +66,6 @@ public class Door : MonoBehaviour
         if (!steps)
         {
             Debug.LogError("Invalid door fields! Please add the steps sound.");
-            errored = true;
-        }
-
-        if (!targetScene)
-        {
-            Debug.LogError("Invalid door fields! Please add the target scene.");
             errored = true;
         }
 
@@ -166,7 +158,7 @@ public class Door : MonoBehaviour
 
         steps.Play();
         FadeRoom faderInstance = FadeRoom.Fade();
-        faderInstance.targetSceneName = targetScene.name;
+        faderInstance.targetSceneName = Saving.levels[levelIndex];
 
         if (Saving.saveData.currentLevel < levelIndex)
         {

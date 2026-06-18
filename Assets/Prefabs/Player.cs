@@ -2,7 +2,6 @@ using UnityEngine;
 using HelperFunctions;
 using System;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider))]
 public class Player : MonoBehaviour
@@ -224,6 +223,8 @@ public class Player : MonoBehaviour
         #if UNITY_WEBGL
         if (inputs.FindAction("General/Press").IsPressed()) { Cursor.lockState = CursorLockMode.Locked; }
         #endif
+
+        if (inputs.FindAction("General/Fullscreen").WasPressedThisFrame()) { Screen.fullScreen = !Screen.fullScreen; }
 
         UpdateState();
         if (state == State.MainMenu) { MainMenuMovement(); return; }

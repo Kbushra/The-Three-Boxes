@@ -317,10 +317,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874136c63fda74347b6781d099588012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Saving
-  levels:
-  - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
-  - {fileID: 102900000, guid: 880b9c770bc43444cbcdc592c7eacd5b, type: 3}
-  - {fileID: 102900000, guid: 97ab3f96f26348b43b5c7ab9d528144f, type: 3}
-  - {fileID: 102900000, guid: 3fcc25d30d21fa441a5226f603190fc8, type: 3}
-  - {fileID: 102900000, guid: 07b1db4658045784aac463a0ad02b31a, type: 3}
-  - {fileID: 102900000, guid: c3e36207816f1c24ab8dcee40f59f2d7, type: 3}
+  levelsNonstatic:
+  - {}

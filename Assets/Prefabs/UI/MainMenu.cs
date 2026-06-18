@@ -1,6 +1,5 @@
 using HelperFunctions;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +8,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playText;
     [SerializeField] private TextMeshProUGUI levelSelectText;
     [SerializeField] private TextMeshProUGUI[] levelTexts;
-    [SerializeField] private SceneAsset[] levelScenes;
     private string[] levelNames = { "INTRO", "CRATES", "PAINTINGS", "BUTTONS", "REALMS", "ENDING" };
 
     private int[] selection = { 0, 0 };
@@ -33,9 +31,9 @@ public class MainMenu : MonoBehaviour
             errored = true;
         }
 
-        if (levelTexts.Length == 0 || !(levelTexts.Length == levelScenes.Length && levelScenes.Length == levelNames.Length))
+        if (levelTexts.Length == 0 || !(levelTexts.Length == levelNames.Length))
         {
-            Debug.LogError("Invalid pause menu fields! Please have the same amount of level options as names and scenes, and have at least one level.");
+            Debug.LogError("Invalid pause menu fields! Please have the same amount of level options as names, and have at least one level.");
             errored = true;
         }
 
@@ -112,7 +110,7 @@ public class MainMenu : MonoBehaviour
         else
         {
             faderInstance = FadeRoom.Fade();
-            faderInstance.targetSceneName = levelScenes[selection[1]].name;
+            faderInstance.targetSceneName = Saving.levels[selection[1]];
             faderInstance.spd = 2;
         }
     }

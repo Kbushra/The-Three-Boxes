@@ -181,6 +181,15 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fullscreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b59b898-7380-402a-b37f-831c284e8ffd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -524,6 +533,28 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Deny"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17958eb3-5fb4-49e9-94c2-a7904b2727a3"",
+                    ""path"": ""<Keyboard>/f11"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""633fd952-ee6d-4600-a1ad-ee3705e197ce"",
+                    ""path"": ""<Keyboard>/f4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -603,6 +634,7 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         m_General_Down = m_General.FindAction("Down", throwIfNotFound: true);
         m_General_Confirm = m_General.FindAction("Confirm", throwIfNotFound: true);
         m_General_Deny = m_General.FindAction("Deny", throwIfNotFound: true);
+        m_General_Fullscreen = m_General.FindAction("Fullscreen", throwIfNotFound: true);
     }
 
     ~@Inputs()
@@ -693,6 +725,7 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_General_Down;
     private readonly InputAction m_General_Confirm;
     private readonly InputAction m_General_Deny;
+    private readonly InputAction m_General_Fullscreen;
     /// <summary>
     /// Provides access to input actions defined in input action map "General".
     /// </summary>
@@ -744,6 +777,10 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "General/Deny".
         /// </summary>
         public InputAction @Deny => m_Wrapper.m_General_Deny;
+        /// <summary>
+        /// Provides access to the underlying input action "General/Fullscreen".
+        /// </summary>
+        public InputAction @Fullscreen => m_Wrapper.m_General_Fullscreen;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -800,6 +837,9 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Deny.started += instance.OnDeny;
             @Deny.performed += instance.OnDeny;
             @Deny.canceled += instance.OnDeny;
+            @Fullscreen.started += instance.OnFullscreen;
+            @Fullscreen.performed += instance.OnFullscreen;
+            @Fullscreen.canceled += instance.OnFullscreen;
         }
 
         /// <summary>
@@ -841,6 +881,9 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Deny.started -= instance.OnDeny;
             @Deny.performed -= instance.OnDeny;
             @Deny.canceled -= instance.OnDeny;
+            @Fullscreen.started -= instance.OnFullscreen;
+            @Fullscreen.performed -= instance.OnFullscreen;
+            @Fullscreen.canceled -= instance.OnFullscreen;
         }
 
         /// <summary>
@@ -1016,5 +1059,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDeny(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Fullscreen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFullscreen(InputAction.CallbackContext context);
     }
 }

@@ -36,7 +36,7 @@ public class Scene1Manager : MonoBehaviour
             
             step = 1;
             messageInstance = Instantiate(message, canvas.transform).GetComponent<Message>();
-            messageInstance.message = "WASD/ARROWS to move, CURSOR to look";
+            messageInstance.message = "WASD/ARROWS to move, CURSOR to look, ALT+ENTER/F4/F11 to toggle fullscreen";
             messageInstance.fadeAfter = false;
         }
 

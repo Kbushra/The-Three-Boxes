@@ -84,7 +84,7 @@ public class SceneCratesManager : MonoBehaviour
         if (Collisions.BoxCollisions(lightCollider).Contains(playerCollider)) { collisionTime += Time.deltaTime; }
         else
         {
-            if (Maths.NearEquals(collisionTime, 3, 0.5f)) { Door.OpenAll(); }
+            if (Maths.NearEquals(collisionTime, 3, 1)) { Door.OpenAll(); }
             collisionTime = 0;
         }
     }

@@ -2162,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8011462977572956465, guid: 81d235fad460bc94bb019ea9440e1368, type: 3}
       propertyPath: text
-      value: The power to POST a dot and dash is not small.\nThe left button, morse,
+      value: The power to POST a dot and dash is not small.\nThe left button morse,
         and the right button a letter break.
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -1,6 +1,5 @@
 using System.Linq;
 using HelperFunctions;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +8,6 @@ public class SceneEndingManager : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Door door;
     [SerializeField] private BoxCollider endTrigger;
-    [SerializeField] private SceneAsset targetScene;
 
     private BoxCollider playerCollider;
     private Canvas canvas;
@@ -31,8 +29,8 @@ public class SceneEndingManager : MonoBehaviour
     {
         if (button.fullHoldLength > 0) { door.open = true; }
 
-        if (Player.openMainMenu || Player.state == Player.State.MainMenu || !playerCollider || !canvas ||
-        Collisions.BoxCollisions(endTrigger).Contains(playerCollider)) { return; }
+        if (FindObjectsByType<FadeRoom>().Length > 0 || Player.state == Player.State.MainMenu ||
+        !playerCollider || !canvas || Collisions.BoxCollisions(endTrigger).Contains(playerCollider)) { return; }
 
         Player.openMainMenu = true;
         FadeRoom faderInstance = FadeRoom.Fade();
