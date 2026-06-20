@@ -33,7 +33,7 @@ public class Button : Interactable
 
         if (errored) { Destroy(this); return; }
 
-        start = transform.position;
+        start = renderComponents[0].transform.position;
     }
 
     public void HoverButton(Renderer renderComponent)
@@ -66,6 +66,6 @@ public class Button : Interactable
 
         offset = Maths.LerpDelta(offset, interacted ? -0.09f : 0, 0.9998f);
         Vector3 targOffset = transform.rotation * new Vector3(0, offset, 0);
-        transform.position = start + targOffset;
+        renderComponents[0].transform.position = start + targOffset;
     }
 }

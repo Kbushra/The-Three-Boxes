@@ -13,7 +13,8 @@ public class SceneLayersManager : MonoBehaviour
     private bool[] layersCompleted = new bool[4];
     private bool swapActivated = false;
 
-    private string morse = "";
+    private string[] morse = { "", "", "", "" };
+    private int currMorseChar = 0;
 
     private int firstTap = 0;
     private int secondTap = 0;
@@ -74,38 +75,40 @@ public class SceneLayersManager : MonoBehaviour
 
         if (signalButton.fullHoldLength > 0)
         {
-            morse += signalButton.fullHoldLength < 0.25f ? '.' : '-';
+            morse[currMorseChar] += signalButton.fullHoldLength < 0.25f ? '.' : '-';
             signalButton.fullHoldLength = 0;
         }
 
         if (breakButton.fullHoldLength > 0)
         {
-            morse += ' ';
+            currMorseChar++;
             breakButton.fullHoldLength = 0;
         }
     }
 
-    private void MorseLeds(string morseReq, Led[] leds, int layerIndex)
+    private void MorseLeds(string[] morseReq, Led[] leds, int layerIndex)
     {
         if (layersCompleted[layerIndex] || Led.LedsFlickering(leds)) { return; }
 
-        int letterCount = 0;
-        for (int i = 0; i < morse.Length; i++)
-        {
-            if (morse[i] == ' ') { letterCount++; }
-        }
+        for (int i = 0; i < Mathf.Min(currMorseChar, leds.Length); i++) { leds[i].Toggle(true); }
 
-        for (int i = 0; i < leds.Length; i++)
+        if (currMorseChar >= leds.Length)
         {
-            leds[i].Toggle(letterCount > i);
-        }
+            bool correct = true;
+            for (int i = 0; i < Mathf.Min(morse.Length, morseReq.Length, leds.Length); i++)
+            {
+                if (morse[i] != morseReq[i])
+                {
+                    leds[i].flickerTime = 1;
+                    correct = false;
+                }
+            }
 
-        if (letterCount == 4)
-        {
-            if (morse != morseReq) { Led.FlickerLeds(leds, 1); }
-            else { layersCompleted[layerIndex] = true; }
+            if (correct) { layersCompleted[layerIndex] = true; }
+            else { Led.ToggleLEDs(leds, false); }
 
-            morse = "";
+            morse = new string[4] { "", "", "", "" };
+            currMorseChar = 0;
         }
     }
 
@@ -151,8 +154,14 @@ public class SceneLayersManager : MonoBehaviour
 
         if (firstTapWait > 1 && secondTapWait > 1)
         {
-            if (firstTap != firstTapReq || secondTap != secondTapReq) { Led.FlickerLeds(leds, 1); }
-            else { layersCompleted[layerIndex] = true; }
+            bool firstCorrect = firstTap == firstTapReq;
+            bool secondCorrect = secondTap == secondTapReq;
+
+            if (!firstCorrect) { leds[0].flickerTime = 1; leds[1].flickerTime = 1; }
+            if (!secondCorrect) { leds[2].flickerTime = 1; leds[3].flickerTime = 1; }
+
+            if (firstCorrect && secondCorrect) { layersCompleted[layerIndex] = true; }
+            else { Led.ToggleLEDs(leds, false); }
 
             firstTap = 0;
             secondTap = 0;
@@ -161,12 +170,17 @@ public class SceneLayersManager : MonoBehaviour
 
     private void Update()
     {
-        if (swapButton.fullHoldLength > 0) { swapActivated = true; }
+        if (swapButton.fullHoldLength > 0 && !swapActivated)
+        {
+            swapActivated = true;
+            Led.ToggleLEDs(firstLeds, false);
+            Led.ToggleLEDs(secondLeds, false);
+        }
 
         if (!swapActivated)
         {
             InterpretMorse(firstButtons[0], firstButtons[1], 0);
-            MorseLeds(".--. --- ... - ", firstLeds, 0);
+            MorseLeds(new string[4] { ".--.", "---", "...", "-" }, firstLeds, 0);
             InterpretTap(secondButtons[0], secondButtons[1], 1);
             TapLeds(3, 5, secondLeds, 1);
         }
@@ -175,7 +189,7 @@ public class SceneLayersManager : MonoBehaviour
             InterpretTap(firstButtons[0], firstButtons[1], 2);
             TapLeds(2, 3, firstLeds, 2);
             InterpretMorse(secondButtons[0], secondButtons[1], 3);
-            MorseLeds("- .- .--. ... ", secondLeds, 3);
+            MorseLeds(new string[4] { "-", ".-", ".--.", "..." }, secondLeds, 3);
         }
 
         doors[0].open = layersCompleted[0];

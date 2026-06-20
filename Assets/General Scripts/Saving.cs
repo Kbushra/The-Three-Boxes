@@ -18,6 +18,7 @@ public class Saving : MonoBehaviour
     public class Data
     {
         public int currentLevel = 0;
+        public float sensitivity = 1;
     }
 
     public static Data saveData;

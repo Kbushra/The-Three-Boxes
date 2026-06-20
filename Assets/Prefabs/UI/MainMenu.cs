@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playText;
     [SerializeField] private TextMeshProUGUI levelSelectText;
     [SerializeField] private TextMeshProUGUI[] levelTexts;
+    [SerializeField] private AudioClip select;
     private string[] levelNames = { "INTRO", "CRATES", "PAINTINGS", "BUTTONS", "REALMS", "ENDING" };
 
     private int[] selection = { 0, 0 };
@@ -89,6 +90,7 @@ public class MainMenu : MonoBehaviour
 
         bool up = Player.inputs.FindAction("General/Up").WasPressedThisFrame();
         bool down = Player.inputs.FindAction("General/Down").WasPressedThisFrame();
+
         selection[page] += up ? -1 : (down ? 1 : 0);
         selection[page] = Maths.Mod(selection[page], page == 0 ? 2 : Mathf.Min(Saving.saveData.currentLevel + 1, levelTexts.Length));
         SelectAll(false);
@@ -96,11 +98,13 @@ public class MainMenu : MonoBehaviour
         if (Player.inputs.FindAction("General/Deny").WasPressedThisFrame()) { page = 0; selection[1] = 0; }
 
         if (!Player.inputs.FindAction("General/Confirm").WasPressedThisFrame()) { return; }
+        if (Player.player) { AudioSource.PlayClipAtPoint(select, Player.player.transform.position); }
 
         if (page == 0)
         {
             if (selection[0] == 0)
             {
+                Player.openMainMenu = false;
                 Player.closeMainMenu = true;
                 faderInstance = FadeRoom.Fade();
                 faderInstance.targetSceneName = SceneManager.GetActiveScene().name;

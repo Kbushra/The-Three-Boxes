@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
     private static float mainMenuCameraSpin = 0;
 
     public float speed = 5;
-    public float sensitivity = 10;
     public float gravity = 0.8f;
     
     private BoxCollider boxComponent;
@@ -123,8 +122,10 @@ public class Player : MonoBehaviour
     private void Look()
     {
         Vector2 look = inputs.FindAction("General/Look").ReadValue<Vector2>();
-        yaw += look.x * sensitivity * Time.deltaTime;
-        pitch -= look.y * sensitivity * Time.deltaTime;
+        float baseSensitivity = 10;
+
+        yaw += look.x * Saving.saveData.sensitivity * baseSensitivity * Time.deltaTime;
+        pitch -= look.y * Saving.saveData.sensitivity * baseSensitivity * Time.deltaTime;
         pitch = Math.Clamp(pitch, -80, 80);
         cameraContainer.transform.rotation = Quaternion.Euler(0, yaw, 0);
         cameraComponent.transform.localRotation = Quaternion.Euler(pitch, 0, 0);

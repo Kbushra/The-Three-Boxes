@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Renderer))]
 public class Led : MonoBehaviour
@@ -26,6 +27,11 @@ public class Led : MonoBehaviour
     {
         foreach (Led led in leds) { if (!led.on) { return false; } }
         return true;
+    }
+
+    public static void ToggleLEDs(Led[] leds, bool toggleOn)
+    {
+        foreach (Led led in leds) { led.Toggle(toggleOn); }
     }
 
     public void Toggle(bool toggleOn)

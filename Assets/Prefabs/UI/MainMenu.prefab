@@ -689,14 +689,7 @@ MonoBehaviour:
   - {fileID: 5976920236440304764}
   - {fileID: 5765173114879098944}
   - {fileID: 689778342003925744}
-  levelScenes:
-  - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
-  - {fileID: 102900000, guid: 880b9c770bc43444cbcdc592c7eacd5b, type: 3}
-  - {fileID: 102900000, guid: 97ab3f96f26348b43b5c7ab9d528144f, type: 3}
-  - {fileID: 102900000, guid: 3fcc25d30d21fa441a5226f603190fc8, type: 3}
-  - {fileID: 102900000, guid: 07b1db4658045784aac463a0ad02b31a, type: 3}
-  - {fileID: 102900000, guid: c3e36207816f1c24ab8dcee40f59f2d7, type: 3}
-  fader: {fileID: 2270455170245618123, guid: ceb84f9ad37cb4a47a8447b724e464d4, type: 3}
+  select: {fileID: 8300000, guid: d8d2f2fe2ebdafa419d41178804bb486, type: 3}
 --- !u!1 &7165614064601283490
 GameObject:
   m_ObjectHideFlags: 0

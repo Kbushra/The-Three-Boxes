@@ -165,6 +165,24 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""88cf9437-99ba-409d-939c-baa767d3db9a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e11ca80-b533-4ee7-91ac-04203a1442cf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Confirm"",
                     ""type"": ""Button"",
                     ""id"": ""23307494-77c2-4bbb-8226-ef5d57147e0f"",
@@ -481,6 +499,50 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""be580327-1ca5-4f9e-9537-7b9cba2b771c"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71aeb9c0-92fa-4ba9-9ee8-ed2ca260f126"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae6f8195-4e71-48f5-a8d8-5b95ac8827ee"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71b88211-79eb-4d69-a18e-a72f2027214c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b569edcb-b390-4934-be77-177085e3f28b"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
@@ -632,6 +694,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         m_General_Menu = m_General.FindAction("Menu", throwIfNotFound: true);
         m_General_Up = m_General.FindAction("Up", throwIfNotFound: true);
         m_General_Down = m_General.FindAction("Down", throwIfNotFound: true);
+        m_General_Left = m_General.FindAction("Left", throwIfNotFound: true);
+        m_General_Right = m_General.FindAction("Right", throwIfNotFound: true);
         m_General_Confirm = m_General.FindAction("Confirm", throwIfNotFound: true);
         m_General_Deny = m_General.FindAction("Deny", throwIfNotFound: true);
         m_General_Fullscreen = m_General.FindAction("Fullscreen", throwIfNotFound: true);
@@ -723,6 +787,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_General_Menu;
     private readonly InputAction m_General_Up;
     private readonly InputAction m_General_Down;
+    private readonly InputAction m_General_Left;
+    private readonly InputAction m_General_Right;
     private readonly InputAction m_General_Confirm;
     private readonly InputAction m_General_Deny;
     private readonly InputAction m_General_Fullscreen;
@@ -769,6 +835,14 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "General/Down".
         /// </summary>
         public InputAction @Down => m_Wrapper.m_General_Down;
+        /// <summary>
+        /// Provides access to the underlying input action "General/Left".
+        /// </summary>
+        public InputAction @Left => m_Wrapper.m_General_Left;
+        /// <summary>
+        /// Provides access to the underlying input action "General/Right".
+        /// </summary>
+        public InputAction @Right => m_Wrapper.m_General_Right;
         /// <summary>
         /// Provides access to the underlying input action "General/Confirm".
         /// </summary>
@@ -831,6 +905,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Down.started += instance.OnDown;
             @Down.performed += instance.OnDown;
             @Down.canceled += instance.OnDown;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
             @Confirm.started += instance.OnConfirm;
             @Confirm.performed += instance.OnConfirm;
             @Confirm.canceled += instance.OnConfirm;
@@ -875,6 +955,12 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Down.started -= instance.OnDown;
             @Down.performed -= instance.OnDown;
             @Down.canceled -= instance.OnDown;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
             @Confirm.started -= instance.OnConfirm;
             @Confirm.performed -= instance.OnConfirm;
             @Confirm.canceled -= instance.OnConfirm;
@@ -1045,6 +1131,20 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRight(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
