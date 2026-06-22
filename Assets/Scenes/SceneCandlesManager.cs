@@ -25,6 +25,8 @@ public class SceneCandlesManager : MonoBehaviour
     [SerializeField] private Door[] doors = new Door[3];
 
     private List<int> symbol = new List<int>();
+    private bool prevKeyOn = false;
+    private bool prevOceanOn = false;
     public bool keypadSuccess = false;
     private int[] times = { 0, 0, 0, 0 };
     public bool timedSuccess = false;
@@ -108,6 +110,8 @@ public class SceneCandlesManager : MonoBehaviour
 
     private void CrypticPaintingKeypadDialogue()
     {
+        
+
         if (!crypticPainting.corrupt) { return; }
 
         if (crypticPaintingFlame.activeSelf)
@@ -178,8 +182,10 @@ public class SceneCandlesManager : MonoBehaviour
         }
         else if (oceanPaintingFlame.activeSelf)
         {
-            List<int> boat = new List<int> { 3, 5, 6, 7, 8 };
-            success = symbol.OrderBy(el => el).SequenceEqual(boat.OrderBy(x => x));
+            List<int> boatUp = new List<int> { 0, 2, 3, 4, 5 };
+            List<int> boatDown = new List<int> { 3, 5, 6, 7, 8 };
+            success = symbol.OrderBy(el => el).SequenceEqual(boatUp.OrderBy(x => x)) ||
+                symbol.OrderBy(el => el).SequenceEqual(boatDown.OrderBy(x => x));
             led = keypadLeds[2];
         }
         else
@@ -188,7 +194,7 @@ public class SceneCandlesManager : MonoBehaviour
             led = keypadLeds[3];
         }
 
-        if (success) { led.Toggle(true); } else { led.flickerTime = 1; }
+        if (success || led.on) { led.Toggle(true); } else { led.flickerTime = 1; }
         symbol.Clear();
 
         keypadSuccess = Led.LedsOn(keypadLeds);
@@ -270,11 +276,20 @@ public class SceneCandlesManager : MonoBehaviour
         bool interacted = Player.inputs.FindAction("General/Interact").WasPressedThisFrame();
         bool swappedRealm = interacted && realmPivot.GetComponentInParent<BlueBulb>().interactable;
 
+        bool keyOrOceanToggled = false;
+        if (prevKeyOn != keyPaintingFlame.activeSelf || prevOceanOn != oceanPaintingFlame.activeSelf)
+        {
+            prevKeyOn = keyPaintingFlame.activeSelf;
+            prevOceanOn = oceanPaintingFlame.activeSelf;
+            keyOrOceanToggled = true;
+        }
+
         RealmTransition();
         
         if (!keypadSuccess)
         {
             InterpretKeypad();
+            if (keyOrOceanToggled) { symbol.Clear(); }
             if (swappedRealm) { KeypadLeds(); }
             return;
         }
